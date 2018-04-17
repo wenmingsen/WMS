@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.csg.statistics.mapper.DrtMonitorBehaviorRecordMapper">
+	<resultMap id="BaseResultMap" type="com.csg.statistics.entity.DrtMonitorBehaviorRecord">
+		<id column="id" property="id"></id>
+		<result column="account_id" property="accountId" />
+		<result column="behavior_type" property="behaviorType" />
+		<result column="behavior_time" property="behaviorTime" />
+	</resultMap>
+	
+	<sql id="BaseColumnList">
+		id as id,
+		account_id as accountId,
+		behavior_type as behaviorType,
+		behavior_time as behaviorTime
+	</sql>
+
+	<sql id="BaseCustomQueryCondition">
+		<if test="id != null">
+			and id=#{id}
+		</if>
+		<if test="accountId != null">
+			and account_id=#{accountId}
+		</if>
+		<if test="behaviorType != null">
+			and behavior_type=#{behaviorType}
+		</if>
+		<if test="behaviorTime != null">
+			and behavior_time=#{behaviorTime}
+		</if>
+	</sql>
+
+	<insert id="insert" parameterType="com.csg.statistics.entity.DrtMonitorBehaviorRecord" >
+    	insert into drt_monitor_behavior_record
+    		(id, account_id, behavior_type, behavior_time) 
+    	values
+    		(#{id}, #{accountId}, #{behaviorType}, #{behaviorTime})
+  	</insert>
+
+  	<update id="update" parameterType="com.csg.statistics.entity.DrtMonitorBehaviorRecord">
+		update drt_monitor_behavior_record set
+		account_id=#{accountId}, behavior_type=#{behaviorType}, behavior_time=#{behaviorTime}
+		where id = #{id}
+	</update>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+	    select 
+	    <include refid="BaseColumnList" />
+	    from drt_monitor_behavior_record
+	    where 
+			id = #{id}
+  	</select>
+
+  	<select id="selectList" resultMap="BaseResultMap" parameterType="com.csg.statistics.entity.DrtMonitorBehaviorRecord">
+	    select 
+	    <include refid="BaseColumnList" />
+	    from drt_monitor_behavior_record
+	    where 1=1
+	    <include refid="BaseCustomQueryCondition" />
+  	</select>
+
+  	
+  	<select id="selectListByDrtMonitorBehaviorRecordBean" resultMap="BaseResultMap" parameterType="com.csg.statistics.entity.DrtMonitorBehaviorRecordBean">
+	    select 
+	    <include refid="BaseColumnList" />
+	    from drt_monitor_behavior_record
+	    where 1=1
+	    <include refid="BaseCustomQueryCondition" />
+	    <if test="behaviorTimeStart != null">
+			<![CDATA[
+			and behavior_time>=#{behaviorTimeStart}
+			]]>
+		</if>
+		<if test="behaviorTimeEnd != null">
+			<![CDATA[
+			and behavior_time<=#{behaviorTimeEnd}
+			]]>
+		</if>
+  	</select>
+
+  	<insert id="insertMonitorBehaviorRecords" parameterType="java.util.List">    
+	    insert into drt_monitor_behavior_record  (id, account_id, behavior_type, behavior_time)   
+	    values  
+	    <foreach collection="list" item="item" index="index" separator="," >  
+		(#{item.id}, #{item.accountId}, #{item.behaviorType}, #{item.behaviorTime})	
+		</foreach>
+	</insert>
+</mapper>

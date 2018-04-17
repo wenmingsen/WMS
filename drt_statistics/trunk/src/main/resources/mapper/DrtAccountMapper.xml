@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.csg.statistics.mapper.DrtAccountMapper">
+	<resultMap id="BaseResultMap" type="com.csg.statistics.entity.DrtAccount">
+		<id column="ACCOUNT_ID" property="accountId"></id>
+		<result column="CREATE_TIME" property="createTime" />
+		<result column="USER_ID" property="userId" />
+		<result column="PHONE" property="phone" />
+		<result column="PWD" property="pwd" />
+		<result column="GESTURE_PWD" property="gesturePwd" />
+		<result column="ACCOUNT_STATUS" property="accountStatus" />
+		<result column="IMG_URL" property="imgUrl" />
+		<result column="NICKNAME" property="nickname" />
+		<result column="LOGIN_FAIL_CNT" property="loginFailCnt" />
+		<result column="LOGIN_FAIL_TIME" property="loginFailTime" />
+		<result column="REMARK" property="remark" />
+		<result column="GESTURE_FAIL_CNT" property="gestureFailCnt" />
+		<result column="GESTURE_FAIL_TIME" property="gestureFailTime" />
+		<result column="OPEN_SYS_MSG" property="openSysMsg" />
+		<result column="OPEN_SYS_MSG_TIME" property="openSysMsgTime" />
+		<result column="OPEN_ELE_BILL" property="openEleBill" />
+		<result column="SOURCE" property="source" />
+		<result column="OPEN_ELE_BILL_TIME" property="openEleBillTime" />
+		<result column="TOTAL_EARNINGS" property="totalEarnings" />
+		<result column="EARNINGS_UP_TIME" property="earningsUpTime" />
+		<result column="PAY_PWD" property="payPwd" />
+		<result column="DRTYHBH" property="drtyhbh" />
+		<result column="PAYPWD_FAIL_CNT" property="paypwdFailCnt" />
+		<result column="PAYPWD_FAIL_TIME" property="paypwdFailTime" />
+		<result column="DEVICEID" property="deviceid" />
+		<result column="REFERRAL" property="referral" />
+		<result column="EXPIRY_EARNINGS" property="expiryEarnings" />
+	</resultMap>
+	
+	<sql id="BaseColumnList">
+		ACCOUNT_ID as accountId,
+		CREATE_TIME as createTime,
+		USER_ID as userId,
+		PHONE as phone,
+		PWD as pwd,
+		GESTURE_PWD as gesturePwd,
+		ACCOUNT_STATUS as accountStatus,
+		IMG_URL as imgUrl,
+		NICKNAME as nickname,
+		LOGIN_FAIL_CNT as loginFailCnt,
+		LOGIN_FAIL_TIME as loginFailTime,
+		REMARK as remark,
+		GESTURE_FAIL_CNT as gestureFailCnt,
+		GESTURE_FAIL_TIME as gestureFailTime,
+		OPEN_SYS_MSG as openSysMsg,
+		OPEN_SYS_MSG_TIME as openSysMsgTime,
+		OPEN_ELE_BILL as openEleBill,
+		SOURCE as source,
+		OPEN_ELE_BILL_TIME as openEleBillTime,
+		TOTAL_EARNINGS as totalEarnings,
+		EARNINGS_UP_TIME as earningsUpTime,
+		PAY_PWD as payPwd,
+		DRTYHBH as drtyhbh,
+		PAYPWD_FAIL_CNT as paypwdFailCnt,
+		PAYPWD_FAIL_TIME as paypwdFailTime,
+		DEVICEID as deviceid,
+		REFERRAL as referral,
+		EXPIRY_EARNINGS as expiryEarnings
+	</sql>
+
+	<sql id="BaseCustomQueryCondition">
+		<if test="accountId != null">
+			and ACCOUNT_ID=#{accountId}
+		</if>
+		<if test="createTime != null">
+			and CREATE_TIME=#{createTime}
+		</if>
+		<if test="userId != null">
+			and USER_ID=#{userId}
+		</if>
+		<if test="phone != null">
+			and PHONE=#{phone}
+		</if>
+		<if test="pwd != null">
+			and PWD=#{pwd}
+		</if>
+		<if test="gesturePwd != null">
+			and GESTURE_PWD=#{gesturePwd}
+		</if>
+		<if test="accountStatus != null">
+			and ACCOUNT_STATUS=#{accountStatus}
+		</if>
+		<if test="imgUrl != null">
+			and IMG_URL=#{imgUrl}
+		</if>
+		<if test="nickname != null">
+			and NICKNAME=#{nickname}
+		</if>
+		<if test="loginFailCnt != null">
+			and LOGIN_FAIL_CNT=#{loginFailCnt}
+		</if>
+		<if test="loginFailTime != null">
+			and LOGIN_FAIL_TIME=#{loginFailTime}
+		</if>
+		<if test="remark != null">
+			and REMARK=#{remark}
+		</if>
+		<if test="gestureFailCnt != null">
+			and GESTURE_FAIL_CNT=#{gestureFailCnt}
+		</if>
+		<if test="gestureFailTime != null">
+			and GESTURE_FAIL_TIME=#{gestureFailTime}
+		</if>
+		<if test="openSysMsg != null">
+			and OPEN_SYS_MSG=#{openSysMsg}
+		</if>
+		<if test="openSysMsgTime != null">
+			and OPEN_SYS_MSG_TIME=#{openSysMsgTime}
+		</if>
+		<if test="openEleBill != null">
+			and OPEN_ELE_BILL=#{openEleBill}
+		</if>
+		<if test="source != null">
+			and SOURCE=#{source}
+		</if>
+		<if test="openEleBillTime != null">
+			and OPEN_ELE_BILL_TIME=#{openEleBillTime}
+		</if>
+		<if test="totalEarnings != null">
+			and TOTAL_EARNINGS=#{totalEarnings}
+		</if>
+		<if test="earningsUpTime != null">
+			and EARNINGS_UP_TIME=#{earningsUpTime}
+		</if>
+		<if test="payPwd != null">
+			and PAY_PWD=#{payPwd}
+		</if>
+		<if test="drtyhbh != null">
+			and DRTYHBH=#{drtyhbh}
+		</if>
+		<if test="paypwdFailCnt != null">
+			and PAYPWD_FAIL_CNT=#{paypwdFailCnt}
+		</if>
+		<if test="paypwdFailTime != null">
+			and PAYPWD_FAIL_TIME=#{paypwdFailTime}
+		</if>
+		<if test="deviceid != null">
+			and DEVICEID=#{deviceid}
+		</if>
+		<if test="referral != null">
+			and REFERRAL=#{referral}
+		</if>
+		<if test="expiryEarnings != null">
+			and EXPIRY_EARNINGS=#{expiryEarnings}
+		</if>
+	</sql>
+
+	<insert id="insert" parameterType="com.csg.statistics.entity.DrtAccount" >
+    	insert into drt_account
+    		(ACCOUNT_ID, CREATE_TIME, USER_ID, PHONE, PWD, GESTURE_PWD, ACCOUNT_STATUS, IMG_URL, NICKNAME, LOGIN_FAIL_CNT, LOGIN_FAIL_TIME, REMARK, GESTURE_FAIL_CNT, GESTURE_FAIL_TIME, OPEN_SYS_MSG, OPEN_SYS_MSG_TIME, OPEN_ELE_BILL, SOURCE, OPEN_ELE_BILL_TIME, TOTAL_EARNINGS, EARNINGS_UP_TIME, PAY_PWD, DRTYHBH, PAYPWD_FAIL_CNT, PAYPWD_FAIL_TIME, DEVICEID, REFERRAL, EXPIRY_EARNINGS) 
+    	values
+    		(#{accountId}, #{createTime}, #{userId}, #{phone}, #{pwd}, #{gesturePwd}, #{accountStatus}, #{imgUrl}, #{nickname}, #{loginFailCnt}, #{loginFailTime}, #{remark}, #{gestureFailCnt}, #{gestureFailTime}, #{openSysMsg}, #{openSysMsgTime}, #{openEleBill}, #{source}, #{openEleBillTime}, #{totalEarnings}, #{earningsUpTime}, #{payPwd}, #{drtyhbh}, #{paypwdFailCnt}, #{paypwdFailTime}, #{deviceid}, #{referral}, #{expiryEarnings})
+  	</insert>
+
+  	<update id="update" parameterType="com.csg.statistics.entity.DrtAccount">
+		update drt_account set
+		CREATE_TIME=#{createTime}, USER_ID=#{userId}, PHONE=#{phone}, PWD=#{pwd}, GESTURE_PWD=#{gesturePwd}, ACCOUNT_STATUS=#{accountStatus}, IMG_URL=#{imgUrl}, NICKNAME=#{nickname}, LOGIN_FAIL_CNT=#{loginFailCnt}, LOGIN_FAIL_TIME=#{loginFailTime}, REMARK=#{remark}, GESTURE_FAIL_CNT=#{gestureFailCnt}, GESTURE_FAIL_TIME=#{gestureFailTime}, OPEN_SYS_MSG=#{openSysMsg}, OPEN_SYS_MSG_TIME=#{openSysMsgTime}, OPEN_ELE_BILL=#{openEleBill}, SOURCE=#{source}, OPEN_ELE_BILL_TIME=#{openEleBillTime}, TOTAL_EARNINGS=#{totalEarnings}, EARNINGS_UP_TIME=#{earningsUpTime}, PAY_PWD=#{payPwd}, DRTYHBH=#{drtyhbh}, PAYPWD_FAIL_CNT=#{paypwdFailCnt}, PAYPWD_FAIL_TIME=#{paypwdFailTime}, DEVICEID=#{deviceid}, REFERRAL=#{referral}, EXPIRY_EARNINGS=#{expiryEarnings}
+		where ACCOUNT_ID = #{accountId}
+	</update>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+	    select 
+	    <include refid="BaseColumnList" />
+	    from drt_account
+	    where 
+			ACCOUNT_ID = #{accountId}
+  	</select>
+
+  	<select id="selectList" resultMap="BaseResultMap" parameterType="com.csg.statistics.entity.DrtAccount">
+	    select 
+	    <include refid="BaseColumnList" />
+	    from drt_account
+	    where 1=1
+	    <include refid="BaseCustomQueryCondition" />
+  	</select>
+  	<!--  昨天用户ID分组的数据  -->
+  	<select id="queryDrtAccount" resultMap="BaseResultMap" >
+	SELECT <include refid="BaseColumnList" />
+	FROM drt_account 
+	WHERE  create_time >= DATE_SUB(DATE(CURRENT_TIMESTAMP()), INTERVAL 1 DAY) AND  DATE(CURRENT_TIMESTAMP()) > create_time GROUP BY account_id
+  	</select>
+
+	<update id="deductExpiryEarnings">
+		UPDATE drt_account
+		SET TOTAL_EARNINGS = TOTAL_EARNINGS - EXPIRY_EARNINGS,
+		EXPIRY_EARNINGS = 0
+		WHERE EXPIRY_EARNINGS > 0
+	</update>
+	
+	<select id="selectListEcpiryEarningsPositive" resultMap="BaseResultMap" parameterType="com.csg.statistics.entity.DrtAccount">
+	    select 
+	    <include refid="BaseColumnList" />
+	    from drt_account
+	    where 1=1
+	    AND EXPIRY_EARNINGS > 0
+	    <include refid="BaseCustomQueryCondition" />
+  	</select>
+	
+</mapper>

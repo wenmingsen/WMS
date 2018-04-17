@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.csg.statistics.mapper.DrtFinPoEarningsComputingRecordMapper">
+	<resultMap id="BaseResultMap" type="com.csg.statistics.entity.DrtFinPoEarningsComputingRecord">
+		<id column="id" property="id"></id>
+		<result column="po_account_id" property="poAccountId" />
+		<result column="po_money" property="poMoney" />
+		<result column="po_time" property="poTime" />
+		<result column="earnings_computing_time" property="earningsComputingTime" />
+		<result column="is_join_computing" property="isJoinComputing" />
+		<result column="is_computed" property="isComputed" />
+		<result column="remark" property="remark" />
+		<result column="creator_id" property="creatorId" />
+		<result column="creator_name" property="creatorName" />
+		<result column="create_time" property="createTime" />
+		<result column="last_modifier_id" property="lastModifierId" />
+		<result column="last_modifier_name" property="lastModifierName" />
+		<result column="last_modify_time" property="lastModifyTime" />
+		<result column="is_delete" property="isDelete" />
+	</resultMap>
+	
+	<sql id="BaseColumnList">
+		id as id,
+		po_account_id as poAccountId,
+		po_money as poMoney,
+		po_time as poTime,
+		earnings_computing_time as earningsComputingTime,
+		is_join_computing as isJoinComputing,
+		is_computed as isComputed,
+		remark as remark,
+		creator_id as creatorId,
+		creator_name as creatorName,
+		create_time as createTime,
+		last_modifier_id as lastModifierId,
+		last_modifier_name as lastModifierName,
+		last_modify_time as lastModifyTime,
+		is_delete as isDelete
+	</sql>
+
+	<sql id="BaseCustomQueryCondition">
+		<if test="id != null">
+			and id=#{id}
+		</if>
+		<if test="poAccountId != null">
+			and po_account_id=#{poAccountId}
+		</if>
+		<if test="poMoney != null">
+			and po_money=#{poMoney}
+		</if>
+		<if test="poTime != null">
+			and po_time=#{poTime}
+		</if>
+		<if test="earningsComputingTime != null">
+			and earnings_computing_time=#{earningsComputingTime}
+		</if>
+		<if test="isJoinComputing != null">
+			and is_join_computing=#{isJoinComputing}
+		</if>
+		<if test="isComputed != null">
+			and is_computed=#{isComputed}
+		</if>
+		<if test="remark != null">
+			and remark=#{remark}
+		</if>
+		<if test="creatorId != null">
+			and creator_id=#{creatorId}
+		</if>
+		<if test="creatorName != null">
+			and creator_name=#{creatorName}
+		</if>
+		<if test="createTime != null">
+			and create_time=#{createTime}
+		</if>
+		<if test="lastModifierId != null">
+			and last_modifier_id=#{lastModifierId}
+		</if>
+		<if test="lastModifierName != null">
+			and last_modifier_name=#{lastModifierName}
+		</if>
+		<if test="lastModifyTime != null">
+			and last_modify_time=#{lastModifyTime}
+		</if>
+		<if test="isDelete != null">
+			and is_delete=#{isDelete}
+		</if>
+	</sql>
+
+	<insert id="insert" parameterType="com.csg.statistics.entity.DrtFinPoEarningsComputingRecord" >
+    	insert into drt_fin_po_earnings_computing_record
+    		(id, po_account_id, po_money, po_time, earnings_computing_time, is_join_computing, is_computed, remark, creator_id, creator_name, create_time, last_modifier_id, last_modifier_name, last_modify_time, is_delete) 
+    	values
+    		(#{id}, #{poAccountId}, #{poMoney}, #{poTime}, #{earningsComputingTime}, #{isJoinComputing}, #{isComputed}, #{remark}, #{creatorId}, #{creatorName}, #{createTime}, #{lastModifierId}, #{lastModifierName}, #{lastModifyTime}, #{isDelete})
+  	</insert>
+
+  	<update id="update" parameterType="com.csg.statistics.entity.DrtFinPoEarningsComputingRecord">
+		update drt_fin_po_earnings_computing_record set
+		po_account_id=#{poAccountId}, po_money=#{poMoney}, po_time=#{poTime}, earnings_computing_time=#{earningsComputingTime}, is_join_computing=#{isJoinComputing}, is_computed=#{isComputed}, remark=#{remark}, creator_id=#{creatorId}, creator_name=#{creatorName}, create_time=#{createTime}, last_modifier_id=#{lastModifierId}, last_modifier_name=#{lastModifierName}, last_modify_time=#{lastModifyTime}, is_delete=#{isDelete}
+		where id = #{id}
+	</update>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+	    select 
+	    <include refid="BaseColumnList" />
+	    from drt_fin_po_earnings_computing_record
+	    where 
+			id = #{id}
+  	</select>
+
+  	<select id="selectList" resultMap="BaseResultMap" parameterType="com.csg.statistics.entity.DrtFinPoEarningsComputingRecord">
+	    select 
+	    <include refid="BaseColumnList" />
+	    from drt_fin_po_earnings_computing_record
+	    where 1=1
+	    <include refid="BaseCustomQueryCondition" />
+  	</select>
+
+
+	
+</mapper>

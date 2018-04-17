@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.csg.statistics.mapper.DrtFinPoEarningsComputingRecordMapper">
+	<resultMap id="BaseResultMap" type="com.csg.statistics.entity.DrtFinPoEarningsComputingRecord">
+		<id column="id" property="id"></id>
+		<result column="po_account_id" property="poAccountId" />
+		<result column="po_money" property="poMoney" />
+		<result column="po_time" property="poTime" />
+		<result column="earnings_computing_time" property="earningsComputingTime" />
+		<result column="is_join_computing" property="isJoinComputing" />
+		<result column="is_computed" property="isComputed" />
+		<result column="remark" property="remark" />
+	</resultMap>
+	
+	<sql id="BaseColumnList">
+		id as id,
+		po_account_id as poAccountId,
+		po_money as poMoney,
+		po_time as poTime,
+		earnings_computing_time as earningsComputingTime,
+		is_join_computing as isJoinComputing,
+		is_computed as isComputed,
+		remark as remark
+	</sql>
+
+	<sql id="BaseCustomQueryCondition">
+		<if test="id != null">
+			and id=#{id}
+		</if>
+		<if test="poAccountId != null">
+			and po_account_id=#{poAccountId}
+		</if>
+		<if test="poMoney != null">
+			and po_money=#{poMoney}
+		</if>
+		<if test="poTime != null">
+			and po_time=#{poTime}
+		</if>
+		<if test="earningsComputingTime != null">
+			and earnings_computing_time=#{earningsComputingTime}
+		</if>
+		<if test="isJoinComputing != null">
+			and is_join_computing=#{isJoinComputing}
+		</if>
+		<if test="isComputed != null">
+			and is_computed=#{isComputed}
+		</if>
+		<if test="remark != null">
+			and remark=#{remark}
+		</if>
+	</sql>
+
+	<insert id="insert" parameterType="com.csg.statistics.entity.DrtFinPoEarningsComputingRecord" >
+    	insert into drt_fin_po_earnings_computing_record
+    		(id, po_account_id, po_money, po_time, earnings_computing_time, is_join_computing, is_computed, remark) 
+    	values
+    		(#{id}, #{poAccountId}, #{poMoney}, #{poTime}, #{earningsComputingTime}, #{isJoinComputing}, #{isComputed}, #{remark})
+  	</insert>
+
+  	<update id="update" parameterType="com.csg.statistics.entity.DrtFinPoEarningsComputingRecord">
+		update drt_fin_po_earnings_computing_record set
+		po_account_id=#{poAccountId}, po_money=#{poMoney}, po_time=#{poTime}, earnings_computing_time=#{earningsComputingTime}, is_join_computing=#{isJoinComputing}, is_computed=#{isComputed}, remark=#{remark}
+		where id = #{id}
+	</update>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+	    select 
+	    <include refid="BaseColumnList" />
+	    from drt_fin_po_earnings_computing_record
+	    where 
+			id = #{id}
+  	</select>
+
+  	<select id="selectList" resultMap="BaseResultMap" parameterType="com.csg.statistics.entity.DrtFinPoEarningsComputingRecord">
+	    select 
+	    <include refid="BaseColumnList" />
+	    from drt_fin_po_earnings_computing_record
+	    where 1=1
+	    <include refid="BaseCustomQueryCondition" />
+  	</select>
+
+
+	
+</mapper>

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.csg.statistics.mapper.DrtMonitorLoginRecordMapper">
+	<resultMap id="BaseResultMap" type="com.csg.statistics.entity.DrtMonitorLoginRecord">
+		<id column="id" property="id"></id>
+		<result column="present_date" property="presentDate" />
+		<result column="account_id" property="accountId" />
+		<result column="phone" property="phone" />
+		<result column="province_name" property="provinceName" />
+		<result column="city_name" property="cityName" />
+		<result column="ip_addr" property="ipAddr" />
+		<result column="device_type" property="deviceType" />
+		<result column="request_count" property="requestCount" />
+		<result column="login_number" property="loginNumber" />
+	</resultMap>
+	
+	<sql id="BaseColumnList">
+		id as id,
+		present_date as presentDate,
+		account_id as accountId,
+		phone as phone,
+		province_name as provinceName,
+		city_name as cityName,
+		ip_addr as ipAddr,
+		device_type as deviceType,
+		request_count as requestCount,
+		login_number as loginNumber
+	</sql>
+
+	<sql id="BaseCustomQueryCondition">
+		<if test="id != null">
+			and id=#{id}
+		</if>
+		<if test="presentDate != null">
+			and present_date=#{presentDate}
+		</if>
+		<if test="accountId != null">
+			and account_id=#{accountId}
+		</if>
+		<if test="phone != null">
+			and phone=#{phone}
+		</if>
+		<if test="provinceName != null">
+			and province_name=#{provinceName}
+		</if>
+		<if test="cityName != null">
+			and city_name=#{cityName}
+		</if>
+		<if test="ipAddr != null">
+			and ip_addr=#{ipAddr}
+		</if>
+		<if test="deviceType != null">
+			and device_type=#{deviceType}
+		</if>
+		<if test="requestCount != null">
+			and request_count=#{requestCount}
+		</if>
+		<if test="loginNumber != null">
+			and login_number=#{loginNumber}
+		</if>
+	</sql>
+
+	<insert id="insert" parameterType="com.csg.statistics.entity.DrtMonitorLoginRecord" >
+    	insert into drt_monitor_login_record
+    		(id, present_date, account_id, phone, province_name, city_name, ip_addr, device_type, request_count, login_number) 
+    	values
+    		(#{id}, #{presentDate}, #{accountId}, #{phone}, #{provinceName}, #{cityName}, #{ipAddr}, #{deviceType}, #{requestCount}, #{loginNumber})
+  	</insert>
+
+  	<update id="update" parameterType="com.csg.statistics.entity.DrtMonitorLoginRecord">
+		update drt_monitor_login_record set
+		present_date=#{presentDate}, account_id=#{accountId}, phone=#{phone}, province_name=#{provinceName}, city_name=#{cityName}, ip_addr=#{ipAddr}, device_type=#{deviceType}, request_count=#{requestCount}, login_number=#{loginNumber}
+		where id = #{id}
+	</update>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+	    select 
+	    <include refid="BaseColumnList" />
+	    from drt_monitor_login_record
+	    where 
+			id = #{id}
+  	</select>
+
+  	<select id="selectList" resultMap="BaseResultMap" parameterType="com.csg.statistics.entity.DrtMonitorLoginRecord">
+	    select 
+	    <include refid="BaseColumnList" />
+	    from drt_monitor_login_record
+	    where 1=1
+	    <include refid="BaseCustomQueryCondition" />
+  	</select>
+  	
+  	<select id="selectListByDrtMonitorLoginRecordBean" resultMap="BaseResultMap" parameterType="com.csg.statistics.entity.DrtMonitorLoginRecordBean">
+	    select 
+	    <include refid="BaseColumnList" />
+	    from drt_monitor_login_record
+	    where 1=1
+	    <include refid="BaseCustomQueryCondition" />
+	    <if test="presentDateStart != null">
+			<![CDATA[
+			and present_date>=#{presentDateStart}
+			]]>
+		</if>
+		<if test="presentDateEnd != null">
+			<![CDATA[
+			and present_date<=#{presentDateEnd}
+			]]>
+		</if>
+  	</select>
+  	
+  	<insert id="insertMonitorLoginRecords" parameterType="java.util.List">    
+	    insert into drt_monitor_login_record  (id, present_date, account_id, phone, province_name, city_name, ip_addr, device_type, request_count, login_number)  
+	    values  
+	    <foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.presentDate}, #{item.accountId}, #{item.phone}, #{item.provinceName}, #{item.cityName}, #{item.ipAddr}, #{item.deviceType}, #{item.requestCount}, #{item.loginNumber})	
+		</foreach>  
+	</insert>
+  	
+  	
+  	<select id="selectGroupCountByProvinceName" resultType="com.csg.statistics.entity.DrtMonitorLoginRecordBean" parameterType="com.csg.statistics.entity.DrtMonitorLoginRecordBean">
+	    SELECT province_name provinceName, count(1) count FROM drt_monitor_login_record 
+		where 1=1
+		<include refid="BaseCustomQueryCondition" />
+	    <if test="presentDateStart != null">
+			<![CDATA[
+			and present_date>=#{presentDateStart}
+			]]>
+		</if>
+		<if test="presentDateEnd != null">
+			<![CDATA[
+			and present_date<=#{presentDateEnd}
+			]]>
+		</if>
+		group by province_name;
+  	</select>
+  	
+  	<select id="selectGroupCountByCityName" resultType="com.csg.statistics.entity.DrtMonitorLoginRecordBean" parameterType="com.csg.statistics.entity.DrtMonitorLoginRecordBean">
+	    SELECT city_name cityName, count(1) count FROM drt_monitor_login_record 
+		where 1=1
+		<include refid="BaseCustomQueryCondition" />
+	    <if test="presentDateStart != null">
+			<![CDATA[
+			and present_date>=#{presentDateStart}
+			]]>
+		</if>
+		<if test="presentDateEnd != null">
+			<![CDATA[
+			and #{presentDateEnd}>=present_date
+			]]>
+		</if>
+		group by city_name;
+  	</select>
+
+
+	
+</mapper>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.csg.statistics.mapper.DrtFinUnfinishedWorkMapper">
+	
+  	<select id="queryDrtFinUnfinishedWorks" resultType="com.csg.statistics.entity.DrtFinUnfinishedWork" parameterType="com.csg.statistics.entity.DrtFinUnfinishedWork">
+	   select * from drt_fin_unfinished_work a 
+	   WHERE 1=1
+	   <if test="executeTime !=null">
+   			  and  a.execute_time<![CDATA[<=]]> #{executeTime}
+	   </if>
+	   <if test="isValid !=null and isValid !=''">
+	   		and  a.is_valid=#{isValid}
+	   </if>
+	   <if test="type !=null and type !=''">
+	       and a.type=#{type}
+	   </if>
+  	 </select>
+</mapper>

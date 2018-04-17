@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.csg.statistics.mapper.DrtOprPointsRuleMapper">
+	<resultMap id="BaseResultMap" type="com.csg.statistics.entity.DrtOprPointsRule">
+		<id column="points_rule_id" property="pointsRuleId"></id>
+		<result column="points_rule" property="pointsRule" />
+		<result column="points_rule_type" property="pointsRuleType" />
+		<result column="grade" property="grade" />
+		<result column="money_scope_min" property="moneyScopeMin" />
+		<result column="money_scope_max" property="moneyScopeMax" />
+		<result column="bonus_column" property="bonusColumn" />
+		<result column="points_datum_rate" property="pointsDatumRate" />
+		<result column="coefficient" property="coefficient" />
+		<result column="day_income" property="dayIncome" />
+		<result column="achieve_customer_cost" property="achieveCustomerCost" />
+		<result column="status" property="status" />
+		<result column="remark" property="remark" />
+		<result column="creator_id" property="creatorId" />
+		<result column="creator_name" property="creatorName" />
+		<result column="create_time" property="createTime" />
+		<result column="last_modifier_id" property="lastModifierId" />
+		<result column="last_modifier_name" property="lastModifierName" />
+		<result column="last_modify_time" property="lastModifyTime" />
+		<result column="is_delete" property="isDelete" />
+	</resultMap>
+	
+	<sql id="BaseColumnList">
+		points_rule_id as pointsRuleId,
+		points_rule as pointsRule,
+		points_rule_type as pointsRuleType,
+		grade as grade,
+		money_scope_min as moneyScopeMin,
+		money_scope_max as moneyScopeMax,
+		bonus_column as bonusColumn,
+		points_datum_rate as pointsDatumRate,
+		coefficient as coefficient,
+		day_income as dayIncome,
+		achieve_customer_cost as achieveCustomerCost,
+		status as status,
+		remark as remark,
+		creator_id as creatorId,
+		creator_name as creatorName,
+		create_time as createTime,
+		last_modifier_id as lastModifierId,
+		last_modifier_name as lastModifierName,
+		last_modify_time as lastModifyTime,
+		is_delete as isDelete
+	</sql>
+
+	<sql id="BaseCustomQueryCondition">
+		<if test="pointsRuleId != null">
+			and points_rule_id=#{pointsRuleId}
+		</if>
+		<if test="pointsRule != null">
+			and points_rule=#{pointsRule}
+		</if>
+		<if test="pointsRuleType != null">
+			and points_rule_type=#{pointsRuleType}
+		</if>
+		<if test="grade != null">
+			and grade=#{grade}
+		</if>
+		<if test="moneyScopeMin != null">
+			and money_scope_min=#{moneyScopeMin}
+		</if>
+		<if test="moneyScopeMax != null">
+			and money_scope_max=#{moneyScopeMax}
+		</if>
+		<if test="bonusColumn != null">
+			and bonus_column=#{bonusColumn}
+		</if>
+		<if test="pointsDatumRate != null">
+			and points_datum_rate=#{pointsDatumRate}
+		</if>
+		<if test="coefficient != null">
+			and coefficient=#{coefficient}
+		</if>
+		<if test="dayIncome != null">
+			and day_income=#{dayIncome}
+		</if>
+		<if test="achieveCustomerCost != null">
+			and achieve_customer_cost=#{achieveCustomerCost}
+		</if>
+		<if test="status != null">
+			and status=#{status}
+		</if>
+		<if test="remark != null">
+			and remark=#{remark}
+		</if>
+		<if test="creatorId != null">
+			and creator_id=#{creatorId}
+		</if>
+		<if test="creatorName != null">
+			and creator_name=#{creatorName}
+		</if>
+		<if test="createTime != null">
+			and create_time=#{createTime}
+		</if>
+		<if test="lastModifierId != null">
+			and last_modifier_id=#{lastModifierId}
+		</if>
+		<if test="lastModifierName != null">
+			and last_modifier_name=#{lastModifierName}
+		</if>
+		<if test="lastModifyTime != null">
+			and last_modify_time=#{lastModifyTime}
+		</if>
+		<if test="isDelete != null">
+			and is_delete=#{isDelete}
+		</if>
+	</sql>
+
+	<insert id="insert" parameterType="com.csg.statistics.entity.DrtOprPointsRule" >
+    	insert into drt_opr_points_rule
+    		(points_rule_id, points_rule, points_rule_type, grade, money_scope_min, money_scope_max, bonus_column, points_datum_rate, coefficient, day_income, achieve_customer_cost, status, remark, creator_id, creator_name, create_time, last_modifier_id, last_modifier_name, last_modify_time, is_delete) 
+    	values
+    		(#{pointsRuleId}, #{pointsRule}, #{pointsRuleType}, #{grade}, #{moneyScopeMin}, #{moneyScopeMax}, #{bonusColumn}, #{pointsDatumRate}, #{coefficient}, #{dayIncome}, #{achieveCustomerCost}, #{status}, #{remark}, #{creatorId}, #{creatorName}, #{createTime}, #{lastModifierId}, #{lastModifierName}, #{lastModifyTime}, #{isDelete})
+  	</insert>
+
+  	<update id="update" parameterType="com.csg.statistics.entity.DrtOprPointsRule">
+		update drt_opr_points_rule set
+		points_rule=#{pointsRule}, points_rule_type=#{pointsRuleType}, grade=#{grade}, money_scope_min=#{moneyScopeMin}, money_scope_max=#{moneyScopeMax}, bonus_column=#{bonusColumn}, points_datum_rate=#{pointsDatumRate}, coefficient=#{coefficient}, day_income=#{dayIncome}, achieve_customer_cost=#{achieveCustomerCost}, status=#{status}, remark=#{remark}, creator_id=#{creatorId}, creator_name=#{creatorName}, create_time=#{createTime}, last_modifier_id=#{lastModifierId}, last_modifier_name=#{lastModifierName}, last_modify_time=#{lastModifyTime}, is_delete=#{isDelete}
+		where points_rule_id = #{pointsRuleId}
+	</update>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+	    select 
+	    <include refid="BaseColumnList" />
+	    from drt_opr_points_rule
+	    where 
+			points_rule_id = #{pointsRuleId}
+  	</select>
+
+  	<select id="selectList" resultMap="BaseResultMap" parameterType="com.csg.statistics.entity.DrtOprPointsRule">
+	    select 
+	    <include refid="BaseColumnList" />
+	    from drt_opr_points_rule
+	    where 1=1
+	    <include refid="BaseCustomQueryCondition" />
+  	</select>
+
+	<select id="selectOneDrtOprPointsRule" resultMap="BaseResultMap" parameterType="com.csg.statistics.entity.DrtOprPointsRuleBean">
+  		
+		    select 
+		    <include refid="BaseColumnList" />
+		    from drt_opr_points_rule 
+		    where 1=1 
+		<![CDATA[  
+		    and money_scope_min<=#{poEarningsComputingMoney} 
+		    and #{poEarningsComputingMoney}<=money_scope_max 
+		]]>
+		    and points_rule_type=#{pointsRuleType}
+		    <if test="status != null">
+				and status=#{status}
+			</if>
+			<if test="isDelete != null">
+				and is_delete=#{isDelete}
+			</if>
+		    limit 1
+	  
+  	</select>
+
+	
+</mapper>

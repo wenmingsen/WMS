@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.csg.statistics.mapper.DrtOprnBusinessStateMapper">
+    <!-- 查询新增用户日统计 -->
+		 <select id="queryNewUserDayCount" resultType="java.lang.Integer" parameterType="com.csg.statistics.entity.StatistiseBusinessUserBean">
+		   SELECT
+				COUNT(1)
+			FROM
+				DRT_ACCOUNT
+			WHERE 1=1
+				 <![CDATA[ AND CREATE_TIME>=#{startTime} and CREATE_TIME < #{endTime}]]> 
+		 </select>
+		 
+	<!-- 查询实名认证成功的日统计 -->
+		  <select id="queryIdcardDayCount" resultType="java.lang.Integer" parameterType="com.csg.statistics.entity.StatistiseBusinessUserBean">
+			 SELECT
+				count(1)
+			FROM
+				drt_account_idcard
+			WHERE
+				AUTH_STATUS = "2" 
+				<![CDATA[ AND AUTH_RESULT_TIME>=#{startTime} and AUTH_RESULT_TIME < #{endTime}]]> 
+		 </select>
+		 
+	<!-- 查询绑定银行卡日统计 -->
+		 <select id="queryBangkDayCount" resultType="java.lang.Integer" parameterType="com.csg.statistics.entity.StatistiseBusinessUserBean">
+			SELECT
+				count(1)
+			FROM
+				drt_bank_account
+			WHERE
+				account != ''
+			<![CDATA[ AND CREATE_TIME>=#{startTime} and CREATE_TIME < #{endTime}]]> 
+		 </select>
+		 
+	<!-- 查询活跃度的日统计-->
+		 <select id="queryRecordDayCount" resultType="java.lang.Integer" parameterType="com.csg.statistics.entity.StatistiseBusinessUserBean">
+			SELECT
+				count(DISTINCT ACCOUNT_ID)
+			FROM
+				drt_account_record
+			WHERE
+				RECORD_TYPE = "0"
+			<![CDATA[ AND CREATE_TIME>=#{startTime} and CREATE_TIME < #{endTime}]]> 
+		 </select>
+		 
+	<!-- 新增业务用户上一天统计数 -->
+	      <insert id="insBusinessUser" parameterType="com.csg.statistics.entity.DrtStateBusinessUser">
+	          insert drt_state_business_user values 
+	          (#{id},#{newUserCount},#{idcardCount},#{recordCount},#{bangkCount},#{statisticsTime},#{gddwId},#{gddwName},#{createTime})
+	      </insert>
+</mapper>

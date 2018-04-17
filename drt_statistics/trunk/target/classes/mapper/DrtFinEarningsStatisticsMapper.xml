@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.csg.statistics.mapper.DrtFinEarningsStatisticsMapper">
+	<resultMap id="BaseResultMap" type="com.csg.statistics.entity.DrtFinEarningsStatistics">
+		<id column="ID" property="id"></id>
+		<result column="ACCOUNT_ID" property="accountId" />
+		<result column="DYNAMIC_EARNINGS" property="dynamicEarnings" />
+		<result column="PAY_ELEC_EARNINGS" property="payElecEarnings" />
+		<result column="ACTIVITY_EARNINGS" property="activityEarnings" />
+		<result column="TOTAL_EARNINGS" property="totalEarnings" />
+		<result column="UPDATE_TIME" property="updateTime" />
+		<result column="EXCHANGE_EARNINGS" property="exchangeEarnings" />
+		<result column="EXCEPTION_EARNINGS" property="exceptionEarnings" />
+	</resultMap>
+	
+	<sql id="BaseColumnList">
+		ID as id,
+		ACCOUNT_ID as accountId,
+		DYNAMIC_EARNINGS as dynamicEarnings,
+		PAY_ELEC_EARNINGS as payElecEarnings,
+		ACTIVITY_EARNINGS as activityEarnings,
+		TOTAL_EARNINGS as totalEarnings,
+		UPDATE_TIME as updateTime,
+		EXCHANGE_EARNINGS as exchangeEarnings,
+		EXCEPTION_EARNINGS as exceptionEarnings
+	</sql>
+
+	<sql id="BaseCustomQueryCondition">
+		<if test="id != null">
+			and ID=#{id}
+		</if>	
+		<if test="accountId != null">
+			and ACCOUNT_ID=#{accountId}
+		</if>	
+		<if test="dynamicEarnings != null">
+			and DYNAMIC_EARNINGS=#{dynamicEarnings}
+		</if>	
+		<if test="payElecEarnings != null">
+			and PAY_ELEC_EARNINGS=#{payElecEarnings}
+		</if>	
+		<if test="activityEarnings != null">
+			and ACTIVITY_EARNINGS=#{activityEarnings}
+		</if>	
+		<if test="totalEarnings != null">
+			and TOTAL_EARNINGS=#{totalEarnings}
+		</if>	
+		<if test="updateTime != null">
+			and UPDATE_TIME=#{updateTime}
+		</if>
+		<if test="exchangeEarnings != null">
+			and EXCHANGE_EARNINGS=#{exchangeEarnings}
+		</if>		
+		<if test="exceptionEarnings != null">
+			and EXCEPTION_EARNINGS=#{exceptionEarnings}
+		</if>	
+	</sql>
+
+	<insert id="insert" parameterType="com.csg.statistics.entity.DrtFinEarningsStatistics" >
+    	insert into drt_fin_earnings_statistics
+    		(ID, ACCOUNT_ID, DYNAMIC_EARNINGS, PAY_ELEC_EARNINGS, ACTIVITY_EARNINGS, TOTAL_EARNINGS, UPDATE_TIME, EXCHANGE_EARNINGS, EXCEPTION_EARNINGS) 
+    	values
+    		(#{id}, #{accountId}, #{dynamicEarnings}, #{payElecEarnings}, #{activityEarnings}, #{totalEarnings}, #{updateTime}, #{exchangeEarnings}, #{exceptionEarnings})
+  	</insert>
+
+  	<insert id="insertList" parameterType="java.util.List" >
+    	insert into drt_fin_earnings_statistics
+    		(ID, ACCOUNT_ID, DYNAMIC_EARNINGS, PAY_ELEC_EARNINGS, ACTIVITY_EARNINGS, TOTAL_EARNINGS, UPDATE_TIME, EXCHANGE_EARNINGS, EXCEPTION_EARNINGS) 
+    	values
+    	<foreach collection="list" index="index" item="item" separator=",">
+    		(#{item.id}, #{item.accountId}, #{item.dynamicEarnings}, #{item.payElecEarnings}, #{item.activityEarnings}, #{item.totalEarnings}, #{item.updateTime}, #{exchangeEarnings}, #{exceptionEarnings})
+    	</foreach>
+  	</insert>
+
+  	<delete id="delete" parameterType="java.lang.String">
+		delete from drt_fin_earnings_statistics where ID = #{id}
+    </delete>
+
+  	<update id="update" parameterType="com.csg.statistics.entity.DrtFinEarningsStatistics">
+		update drt_fin_earnings_statistics set
+		ACCOUNT_ID=#{accountId}, DYNAMIC_EARNINGS=#{dynamicEarnings}, PAY_ELEC_EARNINGS=#{payElecEarnings}, ACTIVITY_EARNINGS=#{activityEarnings}, TOTAL_EARNINGS=#{totalEarnings}, UPDATE_TIME=#{updateTime}, EXCHANGE_EARNINGS=#{exchangeEarnings}, EXCEPTION_EARNINGS=#{exceptionEarnings}
+		where ID = #{id}
+	</update>
+	
+	<update id="updateIfNotNull" parameterType="com.csg.statistics.entity.DrtFinEarningsStatistics">
+		update drt_fin_earnings_statistics set
+		<if test="accountId != null">
+			ACCOUNT_ID=#{accountId}, 
+		</if>
+		<if test="dynamicEarnings != null">
+			DYNAMIC_EARNINGS=#{dynamicEarnings}, 
+		</if>
+		<if test="payElecEarnings != null">
+			PAY_ELEC_EARNINGS=#{payElecEarnings}, 
+		</if>
+		<if test="activityEarnings != null">
+			ACTIVITY_EARNINGS=#{activityEarnings}, 
+		</if>
+		<if test="totalEarnings != null">
+			TOTAL_EARNINGS=#{totalEarnings}, 
+		</if>
+		<if test="updateTime != null">
+			UPDATE_TIME=#{updateTime},
+		</if>
+		<if test="exchangeEarnings != null">
+			EXCHANGE_EARNINGS=#{exchangeEarnings}, 
+		</if>
+		<if test="exceptionEarnings != null">
+			EXCEPTION_EARNINGS=#{exceptionEarnings},
+		</if>
+		ID = #{id}
+		where ID = #{id}
+	</update>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+	    select 
+	    <include refid="BaseColumnList" />
+	    from drt_fin_earnings_statistics
+	    where 
+			ID = #{id}
+  	</select>
+
+  	<select id="selectList" resultMap="BaseResultMap" parameterType="com.csg.statistics.entity.DrtFinEarningsStatistics">
+	    select 
+	    <include refid="BaseColumnList" />
+	    from drt_fin_earnings_statistics
+	    where 1=1
+	    <include refid="BaseCustomQueryCondition" />
+  	</select>
+
+
+	
+</mapper>

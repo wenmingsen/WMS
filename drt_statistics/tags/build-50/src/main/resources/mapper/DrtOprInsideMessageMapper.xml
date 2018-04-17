@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.csg.statistics.mapper.DrtOprInsideMessageMapper">
+	<resultMap id="BaseResultMap" type="com.csg.statistics.entity.DrtOprInsideMessage">
+		<id column="id" property="id"></id>
+		<result column="message" property="message" />
+		<result column="message_name" property="messageName" />
+		<result column="message_state" property="messageState" />
+		<result column="send_type" property="sendType" />
+		<result column="send_rate" property="sendRate" />
+		<result column="send_time" property="sendTime" />
+		<result column="start_time" property="startTime" />
+		<result column="end_time" property="endTime" />
+		<result column="is_delete" property="isDelete" />
+		<result column="audit_state" property="auditState" />
+		<result column="create_time" property="createTime" />
+		<result column="creator_id" property="creatorId" />
+		<result column="creator_name" property="creatorName" />
+		<result column="modify_time" property="modifyTime" />
+		<result column="modify_id" property="modifyId" />
+		<result column="modify_name" property="modifyName" />
+	</resultMap>
+	
+	<sql id="BaseColumnList">
+		id as id,
+		message as message,
+		message_name as messageName,
+		message_state as messageState,
+		send_type as sendType,
+		send_rate as sendRate,
+		send_time as sendTime,
+		start_time as startTime,
+		end_time as endTime,
+		is_delete as isDelete,
+		audit_state as auditState,
+		create_time as createTime,
+		creator_id as creatorId,
+		creator_name as creatorName,
+		modify_time as modifyTime,
+		modify_id as modifyId,
+		modify_name as modifyName
+	</sql>
+
+	<sql id="BaseCustomQueryCondition">
+		<if test="id != null">
+			and id=#{id}
+		</if>
+		<if test="message != null">
+			and message=#{message}
+		</if>
+		<if test="messageName != null">
+			and message_name=#{messageName}
+		</if>
+		<if test="messageState != null">
+			and message_state=#{messageState}
+		</if>
+		<if test="sendType != null">
+			and send_type=#{sendType}
+		</if>
+		<if test="sendRate != null">
+			and send_rate=#{sendRate}
+		</if>
+		<if test="sendTime != null">
+			and send_time=#{sendTime}
+		</if>
+		<if test="startTime != null">
+			and start_time=#{startTime}
+		</if>
+		<if test="endTime != null">
+			and end_time=#{endTime}
+		</if>
+		<if test="isDelete != null">
+			and is_delete=#{isDelete}
+		</if>
+		<if test="auditState != null">
+			and audit_state=#{auditState}
+		</if>
+		<if test="createTime != null">
+			and create_time=#{createTime}
+		</if>
+		<if test="creatorId != null">
+			and creator_id=#{creatorId}
+		</if>
+		<if test="creatorName != null">
+			and creator_name=#{creatorName}
+		</if>
+		<if test="modifyTime != null">
+			and modify_time=#{modifyTime}
+		</if>
+		<if test="modifyId != null">
+			and modify_id=#{modifyId}
+		</if>
+		<if test="modifyName != null">
+			and modify_name=#{modifyName}
+		</if>
+	</sql>
+
+	<insert id="insert" parameterType="com.csg.statistics.entity.DrtOprInsideMessage" >
+    	insert into drt_opr_inside_message
+    		(id, message, message_name, message_state, send_type, send_rate, send_time, start_time, end_time, is_delete, audit_state, create_time, creator_id, creator_name, modify_time, modify_id, modify_name) 
+    	values
+    		(#{id}, #{message}, #{messageName}, #{messageState}, #{sendType}, #{sendRate}, #{sendTime}, #{startTime}, #{endTime}, #{isDelete}, #{auditState}, #{createTime}, #{creatorId}, #{creatorName}, #{modifyTime}, #{modifyId}, #{modifyName})
+  	</insert>
+
+  	<update id="update" parameterType="com.csg.statistics.entity.DrtOprInsideMessage">
+		update drt_opr_inside_message set
+		message=#{message}, message_name=#{messageName}, message_state=#{messageState}, send_type=#{sendType}, send_rate=#{sendRate}, send_time=#{sendTime}, start_time=#{startTime}, end_time=#{endTime}, is_delete=#{isDelete}, audit_state=#{auditState}, create_time=#{createTime}, creator_id=#{creatorId}, creator_name=#{creatorName}, modify_time=#{modifyTime}, modify_id=#{modifyId}, modify_name=#{modifyName}
+		where id = #{id}
+	</update>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+	    select 
+	    <include refid="BaseColumnList" />
+	    from drt_opr_inside_message
+	    where 
+			id = #{id}
+  	</select>
+
+  	<select id="selectList" resultMap="BaseResultMap" parameterType="com.csg.statistics.entity.DrtOprInsideMessage">
+	    select 
+	    <include refid="BaseColumnList" />
+	    from drt_opr_inside_message
+	    where 1=1
+	    <include refid="BaseCustomQueryCondition" />
+  	</select>
+
+  	<update id="updateInsideMessages" parameterType="java.util.List">    
+		update drt_opr_inside_message set
+		<foreach collection="list" item="item" index="index" separator="," >
+			message=#{item.message}, message_name=#{item.messageName}, message_state=#{item.messageState}, send_type=#{item.sendType}, send_rate=#{item.sendRate}, send_time=#{item.sendTime}, start_time=#{item.startTime}, end_time=#{item.endTime}, is_delete=#{item.isDelete}, audit_state=#{item.auditState}, create_time=#{item.createTime}, creator_id=#{item.creatorId}, creator_name=#{item.creatorName}, modify_time=#{item.modifyTime}, modify_id=#{item.modifyId}, modify_name=#{item.modifyName}
+			where id = #{item.id} 
+    	</foreach>  
+	</update>
+	
+</mapper>

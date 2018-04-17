@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.csg.statistics.mapper.DrtMonitorFundDayMapper">
+	<resultMap id="BaseResultMap" type="com.csg.statistics.entity.DrtMonitorFundDay">
+		<id column="id" property="id"></id>
+		<result column="present_date" property="presentDate" />
+		<result column="po_money" property="poMoney" />
+		<result column="po_user_count" property="poUserCount" />
+		<result column="po_money_max" property="poMoneyMax" />
+		<result column="po_money_min" property="poMoneyMin" />
+		<result column="deduct_money" property="deductMoney" />
+		<result column="deduct_user_count" property="deductUserCount" />
+		<result column="deduct_money_min" property="deductMoneyMin" />
+		<result column="deduct_money_max" property="deductMoneyMax" />
+		<result column="electric_money" property="electricMoney" />
+		<result column="electric_user_count" property="electricUserCount" />
+		<result column="electric_money_max" property="electricMoneyMax" />
+		<result column="electric_money_min" property="electricMoneyMin" />
+		<result column="creator_id" property="creatorId" />
+		<result column="creator_name" property="creatorName" />
+		<result column="create_time" property="createTime" />
+		<result column="last_modifier_id" property="lastModifierId" />
+		<result column="last_modifier_name" property="lastModifierName" />
+		<result column="last_modify_time" property="lastModifyTime" />
+		<result column="is_delete" property="isDelete" />
+	</resultMap>
+	
+	<sql id="BaseColumnList">
+		id as id,
+		present_date as presentDate,
+		po_money as poMoney,
+		po_user_count as poUserCount,
+		po_money_max as poMoneyMax,
+		po_money_min as poMoneyMin,
+		deduct_money as deductMoney,
+		deduct_user_count as deductUserCount,
+		deduct_money_min as deductMoneyMin,
+		deduct_money_max as deductMoneyMax,
+		electric_money as electricMoney,
+		electric_user_count as electricUserCount,
+		electric_money_max as electricMoneyMax,
+		electric_money_min as electricMoneyMin,
+		creator_id as creatorId,
+		creator_name as creatorName,
+		create_time as createTime,
+		last_modifier_id as lastModifierId,
+		last_modifier_name as lastModifierName,
+		last_modify_time as lastModifyTime,
+		is_delete as isDelete
+	</sql>
+
+	<sql id="BaseCustomQueryCondition">
+		<if test="id != null">
+			and id=#{id}
+		</if>
+		<if test="presentDate != null">
+			and present_date=#{presentDate}
+		</if>
+		<if test="poMoney != null">
+			and po_money=#{poMoney}
+		</if>
+		<if test="poUserCount != null">
+			and po_user_count=#{poUserCount}
+		</if>
+		<if test="poMoneyMax != null">
+			and po_money_max=#{poMoneyMax}
+		</if>
+		<if test="poMoneyMin != null">
+			and po_money_min=#{poMoneyMin}
+		</if>
+		<if test="deductMoney != null">
+			and deduct_money=#{deductMoney}
+		</if>
+		<if test="deductUserCount != null">
+			and deduct_user_count=#{deductUserCount}
+		</if>
+		<if test="deductMoneyMin != null">
+			and deduct_money_min=#{deductMoneyMin}
+		</if>
+		<if test="deductMoneyMax != null">
+			and deduct_money_max=#{deductMoneyMax}
+		</if>
+		<if test="electricMoney != null">
+			and electric_money=#{electricMoney}
+		</if>
+		<if test="electricUserCount != null">
+			and electric_user_count=#{electricUserCount}
+		</if>
+		<if test="electricMoneyMax != null">
+			and electric_money_max=#{electricMoneyMax}
+		</if>
+		<if test="electricMoneyMin != null">
+			and electric_money_min=#{electricMoneyMin}
+		</if>
+		<if test="creatorId != null">
+			and creator_id=#{creatorId}
+		</if>
+		<if test="creatorName != null">
+			and creator_name=#{creatorName}
+		</if>
+		<if test="createTime != null">
+			and create_time=#{createTime}
+		</if>
+		<if test="lastModifierId != null">
+			and last_modifier_id=#{lastModifierId}
+		</if>
+		<if test="lastModifierName != null">
+			and last_modifier_name=#{lastModifierName}
+		</if>
+		<if test="lastModifyTime != null">
+			and last_modify_time=#{lastModifyTime}
+		</if>
+		<if test="isDelete != null">
+			and is_delete=#{isDelete}
+		</if>
+	</sql>
+
+	<insert id="insert" parameterType="com.csg.statistics.entity.DrtMonitorFundDay" >
+    	insert into drt_monitor_fund_day
+    		(id, present_date, po_money, po_user_count, po_money_max, po_money_min, deduct_money, deduct_user_count, deduct_money_min, deduct_money_max, electric_money, electric_user_count, electric_money_max, electric_money_min, creator_id, creator_name, create_time, last_modifier_id, last_modifier_name, last_modify_time, is_delete) 
+    	values
+    		(#{id}, #{presentDate}, #{poMoney}, #{poUserCount}, #{poMoneyMax}, #{poMoneyMin}, #{deductMoney}, #{deductUserCount}, #{deductMoneyMin}, #{deductMoneyMax}, #{electricMoney}, #{electricUserCount}, #{electricMoneyMax}, #{electricMoneyMin}, #{creatorId}, #{creatorName}, #{createTime}, #{lastModifierId}, #{lastModifierName}, #{lastModifyTime}, #{isDelete})
+  	</insert>
+
+  	<update id="update" parameterType="com.csg.statistics.entity.DrtMonitorFundDay">
+		update drt_monitor_fund_day set
+		present_date=#{presentDate}, po_money=#{poMoney}, po_user_count=#{poUserCount}, po_money_max=#{poMoneyMax}, po_money_min=#{poMoneyMin}, deduct_money=#{deductMoney}, deduct_user_count=#{deductUserCount}, deduct_money_min=#{deductMoneyMin}, deduct_money_max=#{deductMoneyMax}, electric_money=#{electricMoney}, electric_user_count=#{electricUserCount}, electric_money_max=#{electricMoneyMax}, electric_money_min=#{electricMoneyMin}, creator_id=#{creatorId}, creator_name=#{creatorName}, create_time=#{createTime}, last_modifier_id=#{lastModifierId}, last_modifier_name=#{lastModifierName}, last_modify_time=#{lastModifyTime}, is_delete=#{isDelete}
+		where id = #{id}
+	</update>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+	    select 
+	    <include refid="BaseColumnList" />
+	    from drt_monitor_fund_day
+	    where 
+			id = #{id}
+  	</select>
+
+  	<select id="selectList" resultMap="BaseResultMap" parameterType="com.csg.statistics.entity.DrtMonitorFundDay">
+	    select 
+	    <include refid="BaseColumnList" />
+	    from drt_monitor_fund_day
+	    where 1=1
+	    <include refid="BaseCustomQueryCondition" />
+  	</select>
+
+
+	
+</mapper>
