@@ -1,0 +1,9 @@
+#ensure{
+	margin: 10px;
+    border: 1px solid;
+    padding: 2% 35%;
+    width: 35;
+    text-align: center;
+    color: white;
+    background-color: #ff5001;
+}

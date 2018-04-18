@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>问题反馈</title>
+    <link rel="stylesheet" type="text/css" href="../css/weui.css" />
+    <link rel="stylesheet" type="text/css" href="../css/public.css" />
+    <link rel="stylesheet" type="text/css" href="../css/mall.css" />
+</head>
+<body style="background:#f6f6f6;">
+    <div class="container">
+        <div class="head">
+            <div class="head_navbar">
+                <div class="head_navbar_left">
+                    <a class="w-h-35" href="javascript:;" onClick="javascript :history.back(-1);"><i class="back_before"></i></a>
+                </div>
+                <div class="head_navbar_item">信息反馈</div>
+            </div>
+        </div>
+        <div class="pro_con">
+            <div class="custo_help clear">
+              
+              
+                    <div class="article">*****</div>
+               
+            </div>
+        </div>
+        
+    </div>
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script type="text/javascript">
+    	$(function(){
+    		  var str = location.search;
+	       	  var message = str.split('=')[1];
+	       	  message = decodeURI(message);
+	       	  $(".article").html(message);
+    	});
+    </script>
+</body>
+</html>

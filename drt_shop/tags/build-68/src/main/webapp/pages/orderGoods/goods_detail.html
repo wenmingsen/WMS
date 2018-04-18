@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>商品详情</title>
+    <link rel="stylesheet" type="text/css" href= "../../css/weui.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/public.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/mall.css" />
+    <script type="text/javascript" src="../../js/jquery.js"></script>
+	<script type="text/javascript" src="../../js/jquery.min.js"></script>
+</head>
+<body style="background:#f6f6f6;">
+    <div id = "mainGoods" class="container">
+        <div class="head">
+            <div class="head_navbar"  style = "background-color: #184f84;color:white">
+                <div class="head_navbar_left">
+                    <a class="w-h-35" href="javascript:;" onClick="javascript :history.back(-1);"><i class="back_before"></i></a>
+                </div>
+                <div class="head_navbar_item">商品详情</div>
+            </div>
+        </div>
+        <div class="look_title" style="display:none" id="logindiv"> 
+            <i></i>
+            <span id="info"></span>
+        </div>
+        <div id="shopid">
+	        <div class="goods_intro">
+	        	<div id = "goodsImg">
+	            
+	        	</div>
+	            <div class="intro_detail">
+	                <p class="intro_name"></p>
+	                <div class="clear">
+	                    <p class="money"></p>
+	                </div>
+	            </div>
+	        </div>
+	        <div class="detail_intro">
+	            <h2>产品介绍：</h2>
+	            <p id = "goodsDetail"></p>
+	        </div>
+	        <div style="height:80px;"></div>
+	        <div class="mall-tabbar">
+	                <a href="../shop_cart.html" class="mall_tabbar_item sho_tro">
+	                    <span style="display: inline-block;position: relative;">
+	                        <img src="../../css/img/shop_icon3.png" alt="" class="weui-tabbar__icon">
+	                        <span class="weui-badge" style="position: absolute;top: -2px;right: -10px;" id = "countGoods">*</span>
+	                    </span>
+	                    <p class="weui-tabbar__label">购物车</p>
+	                </a>
+	                <a href="javascript:;" class="mall_tabbar_item join_item">
+	                    <p class="weui-tabbar__label" id = "addGoods">加入购物车</p>
+	                </a>
+	                <span class="mall_tabbar_item buy_item">
+	                    <p class="weui-tabbar__label" id = "buyGoods">立即购买</p>
+	                </span>
+	          </div>
+         </div>
+    </div>
+    
+</body>
+ <script type="text/javascript" src="../../common/common.js"></script>
+ 
+ <script type="text/javascript">
+ 		var orderGoods = null;
+		$(function () {
+			queryOrderGoods();
+			countGoods();
+			$("#mainGoods").on("click","#addGoods",addGoods).on("click","#buyGoods",buyGoods);
+		});
+		
+		
+		/****统计商品种类数量 *********/
+		function countGoods(){
+			var url = "/"+getRoot()+"/ins/drtShopCart/countGoods";
+			 $.ajax({
+    	         type: "post",
+    	         url: url,
+    	         success: function(result){
+    				 if(result.state == 0){
+    					 $("#countGoods").html(result.data);
+ 					 }  
+    	         }
+    	     });
+		}
+		
+		/*发送请求，到数据库查找产品信息 */
+    	function queryOrderGoods(){
+    		var url = "/"+getRoot()+"/ins/drtShopItem/queryOrderGoods";
+    		var params = {};
+    		var str = location.search;
+    		params.id = str.split('=')[1];
+    		 $.ajax({
+    	         type: "post",
+    	         url: url,
+    	         data: params,
+    	         success: function(result){
+    	        	 if(result=="-1"){
+    	     			$("#shopid").hide();
+    	     			$("#logindiv").show();
+    	     			$("#info").html("请登录！");
+    	     			return;
+    	     		}
+    				 if(result.state == 0){
+    					setOrderGoods(result.data);
+ 					 }
+    	         }
+    	     });
+    	}
+    	
+    	/*设置产品详情 */
+    	function setOrderGoods(result){
+    		if(result[0]){
+	    		for(var i = 0; i <result.length; i++){
+	    			$(".intro_name").html(result[i].itemName);
+	        		$(".money").html(Math.ceil(result[i].itemEarnings/100));
+	        		$("#goodsDetail").html(result[i].itemText);
+	        		$("#goodsImg").empty();
+	        		$("#goodsImg").append("<img src = '"+fileServer+result[i].itemPicture+"' width ='100%' >");
+	        		//$("#goodsImg").append("<img src='http://168.168.4.106/fastdfs/group1/M00/00/01/qKgEIlpMviyASuCdAADeg2IT23Q933.png' width='100%' alt='' />");
+	    		}
+    		}
+    	}
+    	
+    	/* 加入购物车  */
+    	function addGoods(){
+    		var url = "/"+getRoot()+"/ins/drtShopCart/addGoods";
+    		var params = {};
+    		var str = location.search;
+    		params.id = str.split('=')[1];
+    		params.itemName = $(".intro_name").html();
+    		params.itemEarnings = $(".money").html();
+    		params.itemText = $("#goodsDetail").html();
+    		 $.ajax({
+    	         type: "post",
+    	         url: url,
+    	         data: params,
+    	         success: function(result){
+    	        	 if(result.state == 0){
+    	        		 Toast("加入成功",2000);
+    	        		 countGoods();
+    	        	 }
+    	         }
+    	     });
+    	}
+    	
+    	 
+    	/*购买商品   */
+    	function buyGoods(){
+    		var str = location.search;
+    		var id = str.split('=')[1];
+    		return location.href='show_order.html?id='+id;
+    	}
+    	
+    	
+		
+    </script>
+</html>

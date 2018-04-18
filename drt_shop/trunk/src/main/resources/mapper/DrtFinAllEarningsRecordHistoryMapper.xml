@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.csg.intshop.mapper.DrtFinAllEarningsRecordHistoryMapper">
+	<resultMap id="BaseResultMap" type="com.csg.intshop.entity.DrtFinAllEarningsRecordHistory">
+		<id column="PO_EARNINGS_RECORD_ID" property="poEarningsRecordId"></id>
+		<result column="PO_ACCOUNT_ID" property="poAccountId" />
+		<result column="ACCOUNT_ID" property="accountId" />
+		<result column="ELEC_USER_ID" property="elecUserId" />
+		<result column="EARNINGS" property="earnings" />
+		<result column="TOTAL_EARNINGS" property="totalEarnings" />
+		<result column="RECORD_TIME" property="recordTime" />
+		<result column="PM_TYPE" property="pmType" />
+		<result column="FROM_TYPE" property="fromType" />
+		<result column="FROM_NAME" property="fromName" />
+		<result column="ORDER_NO" property="orderNo" />
+		<result column="AUDIT_STATE" property="auditState" />
+		<result column="CURRENT_EARNINGS" property="currentEarnings" />
+		<result column="LAST_MODIFY_TIME" property="lastModifyTime" />
+		<result column="CURR_DAY" property="currDay" />
+		<result column="EXPIRY_DAY" property="expiryDay" />
+	</resultMap>
+	
+	<sql id="BaseColumnList">
+		PO_EARNINGS_RECORD_ID as poEarningsRecordId,
+		PO_ACCOUNT_ID as poAccountId,
+		ACCOUNT_ID as accountId,
+		ELEC_USER_ID as elecUserId,
+		EARNINGS as earnings,
+		TOTAL_EARNINGS as totalEarnings,
+		RECORD_TIME as recordTime,
+		PM_TYPE as pmType,
+		FROM_TYPE as fromType,
+		FROM_NAME as fromName,
+		ORDER_NO as orderNo,
+		AUDIT_STATE as auditState,
+		CURRENT_EARNINGS as currentEarnings,
+		LAST_MODIFY_TIME as lastModifyTime,
+		CURR_DAY as currDay,
+		EXPIRY_DAY as expiryDay
+	</sql>
+
+	<sql id="BaseCustomQueryCondition">
+		<if test="poEarningsRecordId != null">
+			and PO_EARNINGS_RECORD_ID=#{poEarningsRecordId}
+		</if>
+		<if test="poAccountId != null">
+			and PO_ACCOUNT_ID=#{poAccountId}
+		</if>
+		<if test="accountId != null">
+			and ACCOUNT_ID=#{accountId}
+		</if>
+		<if test="elecUserId != null">
+			and ELEC_USER_ID=#{elecUserId}
+		</if>
+		<if test="earnings != null">
+			and EARNINGS=#{earnings}
+		</if>
+		<if test="totalEarnings != null">
+			and TOTAL_EARNINGS=#{totalEarnings}
+		</if>
+		<if test="recordTime != null">
+			and RECORD_TIME=#{recordTime}
+		</if>
+		<if test="pmType != null">
+			and PM_TYPE=#{pmType}
+		</if>
+		<if test="fromType != null">
+			and FROM_TYPE=#{fromType}
+		</if>
+		<if test="fromName != null">
+			and FROM_NAME=#{fromName}
+		</if>
+		<if test="orderNo != null">
+			and ORDER_NO=#{orderNo}
+		</if>
+		<if test="auditState != null">
+			and AUDIT_STATE=#{auditState}
+		</if>
+		<if test="currentEarnings != null">
+			and CURRENT_EARNINGS=#{currentEarnings}
+		</if>
+		<if test="lastModifyTime != null">
+			and LAST_MODIFY_TIME=#{lastModifyTime}
+		</if>
+		<if test="currDay != null">
+			and CURR_DAY=#{currDay}
+		</if>
+		<if test="expiryDay != null">
+			and EXPIRY_DAY=#{expiryDay}
+		</if>
+	</sql>
+
+	<insert id="insert" parameterType="com.csg.intshop.entity.DrtFinAllEarningsRecordHistory" >
+    	insert into drt_fin_all_earnings_record_history
+    		(PO_EARNINGS_RECORD_ID, PO_ACCOUNT_ID, ACCOUNT_ID, ELEC_USER_ID, EARNINGS, TOTAL_EARNINGS, RECORD_TIME, PM_TYPE, FROM_TYPE, FROM_NAME, ORDER_NO, AUDIT_STATE, CURRENT_EARNINGS, LAST_MODIFY_TIME, CURR_DAY, EXPIRY_DAY) 
+    	values
+    		(#{poEarningsRecordId}, #{poAccountId}, #{accountId}, #{elecUserId}, #{earnings}, #{totalEarnings}, #{recordTime}, #{pmType}, #{fromType}, #{fromName}, #{orderNo}, #{auditState}, #{currentEarnings}, #{lastModifyTime}, #{currDay}, #{expiryDay})
+  	</insert>
+
+  	<update id="update" parameterType="com.csg.intshop.entity.DrtFinAllEarningsRecordHistory">
+		update drt_fin_all_earnings_record_history set
+		PO_ACCOUNT_ID=#{poAccountId}, ACCOUNT_ID=#{accountId}, ELEC_USER_ID=#{elecUserId}, EARNINGS=#{earnings}, TOTAL_EARNINGS=#{totalEarnings}, RECORD_TIME=#{recordTime}, PM_TYPE=#{pmType}, FROM_TYPE=#{fromType}, FROM_NAME=#{fromName}, ORDER_NO=#{orderNo}, AUDIT_STATE=#{auditState}, CURRENT_EARNINGS=#{currentEarnings}, LAST_MODIFY_TIME=#{lastModifyTime}, CURR_DAY=#{currDay}, EXPIRY_DAY=#{expiryDay}
+		where PO_EARNINGS_RECORD_ID = #{poEarningsRecordId}
+	</update>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+	    select 
+	    <include refid="BaseColumnList" />
+	    from drt_fin_all_earnings_record_history
+	    where 
+			PO_EARNINGS_RECORD_ID = #{poEarningsRecordId}
+  	</select>
+
+  	<select id="selectList" resultMap="BaseResultMap" parameterType="com.csg.intshop.entity.DrtFinAllEarningsRecordHistory">
+	    select 
+	    <include refid="BaseColumnList" />
+	    from drt_fin_all_earnings_record_history
+	    where 1=1
+	    <include refid="BaseCustomQueryCondition" />
+  	</select>
+
+
+	
+</mapper>

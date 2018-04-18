@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script type="text/javascript" src="..//js/jquery-1.11.2.min.js"></script>
+<script type="text/javascript" src="..//js/jquery/jquery.form.js"></script>
+<title>电融通后台服务测试页面</title>
+<script type="text/javascript">
+ $(function(){
+	 aa();
+ });
+ function aa(){
+	 var data = sessionStorage.getItem('id');
+	 alert(data);
+ }
+	function doDeduct(){
+		var value = $("#values").val();
+		var url = "/drt_elec/transactDeduct";
+		var param = {};
+		param.value = value;
+		param.type = "1";
+		$.post(url,param,function(result){
+			console.log(result);
+			alert(result.message);
+		});		
+	}
+</script>
+</head>
+<body>
+
+	
+    
+   	
+   	  	<h3>查欠费账单</h3>
+  	<form action="/drt_elec/elec/web/electricityBill/list" method="post">
+  	账号id：<input value="" name="accountId" type="text" /></br>
+  	类型（1查历史账单0查欠费）<input value="" name="state" type="text" /></br>
+        <input type="submit" value="查欠费" />
+  	</form>
+  	</br>
+  	
+  	  	<h3>交费</h3>
+  	<form action="/drt_elec/elec/web/record/payElecArrears" method="post">
+  	账号id：<input value="" name="accountId" type="text" /></br>
+  	用电户ID<input value="" name="elecUserId" type="text" /></br>
+  	
+  	账单ID<input value="" name="billId" type="text" /></br>
+  	支付类型<input value="" name="payType" type="text" /></br>
+  	手机号<input value="" name="phone" type="text" /></br>
+  	支付密码<input value="" name="payPwd" type="text" /></br>
+        <input type="submit" value="缴费" />
+  	</form>
+  	</br>
+  	
+  	<h3>交费</h3>
+  	<form action="/drt_elec/elec/web/callBackElecPay" method="post">
+  	
+  	
+        <input type="submit" value="批扣缴费" />
+  	</form>
+  	</br>
+</body>
+</html>

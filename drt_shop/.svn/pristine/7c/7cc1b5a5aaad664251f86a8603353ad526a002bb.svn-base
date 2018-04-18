@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>收货信息</title>
+    <link rel="stylesheet" type="text/css" href="css/weui.css" />
+    <link rel="stylesheet" type="text/css" href="css/public.css" />
+    <link rel="stylesheet" type="text/css" href="css/mall.css" />
+</head>
+<body style="background:#f6f6f6;" >
+    <div class="container">
+        <div class="head">
+            <div class="head_navbar" style = "background-color: #184f84;color:white">
+                <div class="head_navbar_left">
+                    <a href="javascript:;" class="w-h-35" onClick="javascript :backOrderDetail()"><i class="back_before"></i></a>
+                </div>
+                <div class="head_navbar_item"><span style = "text-align:center;margin-left:30%;">地址列表</span>
+                	<input type = "button" value = "新增地址" onclick = "addAddress()" style = "background-color: #184f84;color:white;margin-left:20%">
+                </div>
+                
+            </div>
+            <div class="head_navbar_r save">
+              
+            </div>
+        </div>
+        <div class="rec_info" style="border-top:0;">
+            <div class="weui-cells weui-cells_form" id = "addressList">
+                <div class="weui-cell pad_15">
+                    <div class="weui-cell__bd">
+                    	<div id = "detailAddress" >
+                    		收件地址：阿德法撒旦发射的复活节阿萨德后付款lad回复
+                    	</div>
+                    	<div class = "changeAddressStatus">
+                    		<span style = "margin-right: 40%;"><input type = "checkBox" id = "defaultAddress">设置为默认</span>
+                    		<input type = "button" value = "修改" id = "updateAddress()" style = "border:1px solid;right:5px">
+                    		<input type = "button" value = "删除" id = "deleteAddress()" style = "border:1px solid;right:5px">
+                    	</div>
+                    </div>
+                </div>
+                
+            <!--     <div class="weui-cell pad_15">
+                    <div class="weui-cell__hd"><label class="weui-label">联系电话 :</label></div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" type="number" id = "phone">
+                    </div>
+                </div>
+                 <div class="weui-cell pad_15">
+                 	<div id = "position">
+							省份:<select id = "province" name = "province" onchange = "select()" style = "width:90px"></select>
+	                		城市:<select id = "city" name = "city" onchange = "select()" style = "width:90px"></select>
+					</div> 
+				</div>
+                <div class="weui-cell pad_15">
+                    <div class="weui-cell__hd"><label class="weui-label">收货地址 :</label></div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" type="text" id = "address_other">
+                    </div>
+                </div> -->
+            </div>
+        </div>
+       
+    </div>
+     <script type="text/javascript" src="js/jquery.min.js"></script>
+     <script type="text/javascript" src="common/common.js"></script>
+    <script type="text/javascript">
+    	var orderId = null;
+    	$(function(){
+    		 var str = location.search;
+	   	 	 orderId = str.split('=')[1];
+    		 queryAddressList();
+    		$(".container").on("click",".updateAddress",updateAddress).on("click",".deleteAddress",deleteAddress).on("click",".defaultAddress",defaultAddress);
+    	});
+    	
+    	/******查询所有地址 ********/
+    	function queryAddressList(){
+    		var url = "/"+getRoot()+"/ins/drtShopAddress/queryAddressList";
+    		var params = {};
+    		$.ajax({
+    	         type: "get",
+    	         data:params,
+    	         url: url,
+    	         success: function(result){
+    				 if(result.state == 0){
+    					 showAllAddresses(result.data);
+	   				 }
+    	         }
+    	     });    		
+    	}
+    	
+    	/*******展示所有地址 ********/
+    	function showAllAddresses(result){
+    		var addressList = $("#addressList");
+    		addressList.empty();
+    		for(var i = 0; i < result.length; i++){
+    			var panel = '<div class="weui-cell pad_15">'+
+			                    '<div class="weui-cell__bd">'+
+					            '	<div id = "detailAddress" >'+
+					            '		收件人:'+result[i].name+' 地址:'+result[i].addressOther +
+					            '	</div>'+
+					            '	<div class = "changeAddressStatus" >'+
+					            '		<span style = "margin-right: 50%;"><input type = "checkbox"   name ="radio" class = "defaultAddress"  value = "'+result[i].id+'">设置为默认</span>'+
+					            '		<input type = "button" value = "修改" class = "updateAddress" style = "border:1px solid;right:5px">'+
+					            '		<input type="text" value = "'+result[i].id+'&'+result[i].addressLevel1Id+'&'+result[i].addressLevel2Id+'&'+result[i].addressLevel3Id+'" style = "display:none">'+
+					            '		<input type = "button" value = "删除" class = "deleteAddress" style = "border:1px solid;right:5px">'+
+					            '	</div>'+
+					            '</div>'+
+					        '</div>';
+				if(result[i].isDefault==0){
+					panel = '<div class="weui-cell pad_15">'+
+			                    '<div class="weui-cell__bd">'+
+					            '	<div id = "detailAddress" >'+
+					            '		收件人:'+result[i].name+' 地址:'+result[i].addressOther +
+					            '	</div>'+
+					            '	<div class = "changeAddressStatus" >'+
+					            '		<span style = "margin-right: 50%;"><input type = "checkbox"   checked name ="radio" class = "defaultAddress"  value = "'+result[i].id+'">设置为默认</span>'+
+					            '		<input type = "button" value = "修改" class = "updateAddress" style = "border:1px solid;right:5px">'+
+					            '		<input type="text" value = "'+result[i].id+'&'+result[i].addressLevel1Id+'&'+result[i].addressLevel2Id+'&'+result[i].addressLevel3Id+'" style = "display:none">'+
+					            '		<input type = "button" value = "删除" class = "deleteAddress" style = "border:1px solid;right:5px">'+
+					            '	</div>'+
+					            '</div>'+
+					        '</div>';
+				}		        
+				addressList.append(panel);
+    		}
+    	}
+    	
+    	/*****新增地址 ***********/
+    	function addAddress(){
+    		return location.href="address.html?orderId="+orderId;
+    	}
+    	
+    	/********修改地址 ***************/
+    	function updateAddress(){
+    		var idAll = $(this).next().val()+"&"+orderId;//idAll是地址主键id和一级二级城市的id组合  
+    		return location.href="address.html?idAll="+idAll;
+    	}
+    	
+    	/************设置默认地址 *****************/
+    	function defaultAddress(){
+    		var url = "/"+getRoot()+"/ins/drtShopAddress/updateAddress";
+    		var params = {};
+    		var id = $(this).val();
+    		params.id = id;
+    		if($(this).is(":checked")){
+    			params.isDefault = 0;
+    		}else{
+    			params.isDefault = 1;
+    		}
+    		var btn = $(this);
+    		var allName = document.getElementsByName("radio");
+    		for(var i = 0; i <allName.length; i++){
+    			allName[i].checked=false;
+    		}
+    		btn.prop("checked",true);
+    		 $.ajax({
+     	         type: "post",
+     	         url: url,
+     	         data: params,
+     	         success: function(result){
+     	        	if(result.message){
+	    	        	 Toast(result.message,2000);
+   	        	 	}
+     	         }
+     	     });
+    	}
+    	/********删除地址 ****************/
+    	function deleteAddress(){
+    		var params = {};
+    		params.id = $(this).prev().val().split("&")[0];
+    		var url = "/"+getRoot()+"/ins/drtShopAddress/deleteAddress";
+    		$.ajax({
+    	         type: "get",
+    	         url: url,
+    	         data: params,
+    	         success: function(result){
+    	        	 if(result.message){
+	    	        	 Toast(result.message,2000);
+    	        	 }
+					if(result.state==0){
+						queryAddressList();
+					}	
+    	         }
+    	     }); 
+    	}
+    	/********返回订单 ***********/
+    	 function backOrderDetail(){
+    	  	     return location.href="orderGoods/order_detail.html?orderId="+orderId+"&orderState";
+    	    }
+    	
+    </script>
+</body>
+</html>

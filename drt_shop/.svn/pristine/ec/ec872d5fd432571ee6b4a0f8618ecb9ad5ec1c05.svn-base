@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.csg.intshop.mapper.DrtShopItemMapper">
+	<resultMap id="BaseResultMap" type="com.csg.intshop.entity.DrtShopItem">
+		<id column="id" property="id"></id>
+		<result column="item_name" property="itemName" />
+		<result column="item_price" property="itemPrice" />
+		<result column="item_earnings" property="itemEarnings" />
+		<result column="item_text" property="itemText" />
+		<result column="item_picture" property="itemPicture" />
+		<result column="creator_id" property="creatorId" />
+		<result column="creator_name" property="creatorName" />
+		<result column="create_time" property="createTime" />
+		<result column="item_state" property="itemState" />
+		<result column="sort" property="sort" />
+		<result column="item_no" property="itemNo" />
+		<result column="remark" property="remark" />
+	</resultMap>
+	
+	<sql id="BaseColumnList">
+		id as id,
+		item_name as itemName,
+		item_price as itemPrice,
+		item_earnings as itemEarnings,
+		item_text as itemText,
+		item_picture as itemPicture,
+		creator_id as creatorId,
+		creator_name as creatorName,
+		create_time as createTime,
+		item_state as itemState,
+		sort as sort,
+		item_no as itemNo,
+		remark as remark
+	</sql>
+
+	<sql id="BaseCustomQueryCondition">
+		<if test="id != null">
+			and id=#{id}
+		</if>
+		<if test="itemName != null">
+			and item_name=#{itemName}
+		</if>
+		<if test="itemPrice != null">
+			and item_price=#{itemPrice}
+		</if>
+		<if test="itemEarnings != null">
+			and item_earnings=#{itemEarnings}
+		</if>
+		<if test="itemText != null">
+			and item_text=#{itemText}
+		</if>
+		<if test="itemPicture != null">
+			and item_picture=#{itemPicture}
+		</if>
+		<if test="creatorId != null">
+			and creator_id=#{creatorId}
+		</if>
+		<if test="creatorName != null">
+			and creator_name=#{creatorName}
+		</if>
+		<if test="createTime != null">
+			and create_time=#{createTime}
+		</if>
+		<if test="itemState != null">
+			and item_state=#{itemState}
+		</if>
+		<if test="sort != null">
+			and sort=#{sort}
+		</if>
+		<if test="itemNo != null">
+			and item_no=#{itemNo}
+		</if>
+		<if test="remark != null">
+			and remark=#{remark}
+		</if>
+	</sql>
+
+	<insert id="insert" parameterType="com.csg.intshop.entity.DrtShopItem" >
+    	insert into drt_shop_item
+    		(id, item_name, item_price, item_earnings, item_text, item_picture, creator_id, creator_name, create_time, item_state, sort, item_no, remark) 
+    	values
+    		(#{id}, #{itemName}, #{itemPrice}, #{itemEarnings}, #{itemText}, #{itemPicture}, #{creatorId}, #{creatorName}, #{createTime}, #{itemState}, #{sort}, #{itemNo}, #{remark})
+  	</insert>
+
+  	<update id="update" parameterType="com.csg.intshop.entity.DrtShopItem">
+		update drt_shop_item set
+		item_name=#{itemName}, item_price=#{itemPrice}, item_earnings=#{itemEarnings}, item_text=#{itemText}, item_picture=#{itemPicture}, creator_id=#{creatorId}, creator_name=#{creatorName}, create_time=#{createTime}, item_state=#{itemState}, sort=#{sort}, item_no=#{itemNo}, remark=#{remark}
+		where id = #{id}
+	</update>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+	    select 
+	    drt.id as id,
+		drt.item_name as itemName,
+		drt.item_price as itemPrice,
+		drt.item_earnings as itemEarnings,
+		drt.item_text as itemText,
+		drt.item_picture as itemPicture,
+		drt.creator_id as creatorId,
+		drt.creator_name as creatorName,
+		drt.create_time as createTime,
+		drt.item_state as itemState,
+		drt.sort as sort,
+		drt.item_no as itemNo,
+		drt.remark as remark,
+		drtC.item_num as itemNum
+	    from drt_shop_item drt
+	    left join drt_shop_cart drtC
+	    on drt.id = drtC.item_id
+	    where 
+			drt.id = #{id}
+  	</select>
+  	
+
+  	<select id="selectList" resultMap="BaseResultMap" parameterType="com.csg.intshop.entity.DrtShopItem">
+	    select 
+	    drt.id as id,
+		drt.item_name as itemName,
+		drt.item_price as itemPrice,
+		drt.item_earnings as itemEarnings,
+		drt.item_text as itemText,
+		drt.item_picture as itemPicture,
+		drt.creator_id as creatorId,
+		drt.creator_name as creatorName,
+		drt.create_time as createTime,
+		drt.item_state as itemState,
+		drt.sort as sort,
+		drt.item_no as itemNo,
+		drt.remark as remark,
+		drtC.item_num as itemNum
+	    from drt_shop_cart drtC
+	    left join drt_shop_item drt
+	    on drt.id = drtC.item_id
+	    where 1=1
+	    <include refid="BaseCustomQueryCondition" />
+  	</select>
+ 
+   <select id="seleItems" resultMap="BaseResultMap" parameterType="com.csg.intshop.entity.DrtShopItem">
+           select 
+		     <include refid="BaseColumnList" />
+		    from drt_shop_item
+		    where 1=1
+		    <include refid="BaseCustomQueryCondition" />
+   </select>
+
+	<!--获取商品品种总数  -->
+	<select id="selCount" resultType="java.lang.Integer" parameterType="com.csg.intshop.entity.DrtShopItem">
+		    select 
+		    count(1)
+		    from drt_shop_item
+		    where 1=1
+		    <include refid="BaseCustomQueryCondition" />
+	  	</select>
+	
+</mapper>

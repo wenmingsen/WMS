@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>订单详情</title>
+    <link rel="stylesheet" type="text/css" href="../css/weui.css" />
+    <link rel="stylesheet" type="text/css" href="../css/public.css" />
+    <link rel="stylesheet" type="text/css" href="../css/mall.css" />
+    <style type="text/css">
+    .weui-cell__hd label{
+        float:left;
+    }
+    .weui-cell__bd{
+        display:none;
+    }
+    </style>
+</head>
+<body style="background:#f6f6f6;">
+    <div class="container">
+        <div class="head">
+            <div class="head_navbar">
+                <div class="head_navbar_left">
+                    <a class="w-h-35" href="javascript:;" onClick="javascript :history.back(-1);"><i class="back_before"></i></a>
+                </div>
+                <div class="head_navbar_item" id = "orderItem">订单详情</div>
+            </div>
+        </div>
+        <div class="order_state_wrap">
+            <div class="order_state" style="border-top:0;">
+                <p class="order_num" id = "orderNum">订单号：2016112103125</p>
+            </div>
+            	<!-- 购买商品展示区 -->
+            <div id = "shopGoodsDetail">
+            
+            </div>
+        </div>
+        <div class="rec_info">
+            <div class="rec_info_title clear">
+                <div class="tit_f_l">收货信息</div>
+                <div class="tit_f_r" onclick = "updatePosition()">
+                    <i><img src="../css/img/editor.png" height="14" alt="" /></i>
+                    编辑地址
+                </div>
+            </div>
+            <div class="weui-cells weui-cells_form">
+                <div class="weui-cell pad_15">
+                    <div class="weui-cell__hd">
+                        <label class="weui-label">收货人：</label>
+                        <label id = "name">*******</label>
+                    </div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" type="text" placeholder="">
+                    </div>
+                </div>
+                <div class="weui-cell pad_15">
+                    <div class="weui-cell__hd">
+                        <label class="weui-label">联系电话 :</label>
+                        <label id = "phone">*******</label>
+                    </div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" type="number" >
+                    </div>
+                </div>
+                <div class="weui-cell pad_15">
+                    <div class="weui-cell__hd">
+                        <label class="weui-label">收货地址 :</label>
+                        <label id = "address_other">*********</label>
+                    </div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" type="text" >
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="height:80px;"></div>
+        <div class="set_acc clear">
+            <div class="set_acc_l">
+                合计：<span><span class="num" id = "totalMoney">***</span> 积分</span>
+            </div>
+            <span onclick = "exchangeGoods()" class="set_acc_r">兑换</span>
+        </div>
+    </div>
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../common/common.js"></script>
+    <script type="text/javascript">
+         $(function(){
+        	getGoodsId();
+        	queryPosition();
+         });
+         
+	/*********查询收货地址 ************/
+	function queryPosition(){
+		var url = "/"+getRoot()+"/ins/drtShopAddress/queryAddressList";
+    	var params = {};
+    	params.isDefault = 0;
+    	$.ajax({
+	         type: "get",
+	         url: url,
+	         data: params,
+	         success: function(result){
+				 if(result.state == 0){
+					 setPositionInfo(result.data);
+				 }else{    					
+					 location.href = "problem.html?message = "+""+result.message;
+				 }           	 
+	         }
+	     });
+	}
+	/*****设置地址信息 *******/
+    function setPositionInfo(result){
+    	for(var i = 0 ;i< result.length;i++){
+	    	$("#name").html(result[i].name);
+	    	$("#phone").html(result[i].phone);
+	    	$("#address_other").html(result[i].addressOther);
+    	}
+    }
+         
+         /**增加数量 */
+         function addNum(btn){
+        	 var price = parseInt(btn.nextElementSibling.innerHTML);
+        	 var n =  parseInt(btn.nextElementSibling.nextElementSibling.innerHTML);
+             n++;
+             btn.nextElementSibling.nextElementSibling.innerHTML = n;
+             
+             var totalMoney = parseInt($("#totalMoney").html());
+             $("#totalMoney").html(totalMoney+price);
+         }
+         
+         /**减少数量  */
+         function reduceNum(btn){
+        	 var price = parseInt(btn.previousElementSibling.previousElementSibling.innerHTML);
+        	 var n = parseInt(btn.previousElementSibling.innerHTML);
+             n--;
+             if(n<1){
+                 n=1;
+             }else{
+            	 var totalMoney = parseInt($("#totalMoney").html());
+                 $("#totalMoney").html(totalMoney-price);
+             }
+             btn.previousElementSibling.innerHTML = n;
+         }
+         /*分析展示订单还是创建订单     */
+       function getGoodsId(){
+        	 var str = location.search;
+        	 var id = str.split('=')[1];
+        	 if(str.search("orderState")==-1){//1表示订单是代付款状态 
+        		 insertOrder(id);
+        	 }else{
+        		 queryOrderGoods(id.split("&")[0]);
+        	 }
+         }
+         
+         /*创建订单  */
+         var orderNo = null;
+     	function insertOrder(id){
+     		var date = new Date().toLocaleString().split(" ")[0].replace("/","").replace("/","");
+     	    var orderNum = date+parseInt(Math.random()*100000);
+     	    orderNo = orderNum;
+     		var url = "/"+getRoot()+"/ins/drtShopOrderDetail/insertOrder";
+     		var params = {};
+     		params.orderNum = orderNum;
+     		if(id){
+     			params.id = id;
+     		}
+     		 $.ajax({
+     	         type: "GET",
+     	         url: url,
+     	         data: params,
+     	         success: function(result){
+     				 if(result.state == 0){
+     					queryOrderGoods(result.data);
+  					 }else{    					
+  						location.href = "problem.html?message = "+""+result.message;
+     				 }           	 
+     	         }
+     	     });
+     	}
+         
+        
+        /*发送请求，到数据库查找产品信息 */
+        var orderId = null;
+    	function queryOrderGoods(id){
+    		orderId = id;
+    		var url = "/"+getRoot()+"/ins/drtShopOrder/queryGoods";
+    		var params = {};
+    		params.orderId = id;
+    		 $.ajax({
+    	         type: "GET",
+    	         url: url,
+    	         data: params,
+    	         success: function(result){
+    				 if(result.state == 0){
+    					setOrderGoods(result.data);
+ 					 }else{    					
+ 						location.href = "problem.html?message = "+""+result.message;
+    				 }           	 
+    	         }
+    	     });
+    	}
+         
+       /**显示订单中的商品 */
+       var totalMoney = 0;
+       function setOrderGoods(result){    	 
+    	   $("#orderNum").html("订单号:"+result[0].orderNo);
+    	   var shopGoodsDetail = $("#shopGoodsDetail");
+    	   shopGoodsDetail.empty();
+    	   for(var i = 0 ;i < result.length; i ++){
+    		   var panel = '<div class="shop_goods_item clear"> '+
+	               ' <div class="detail clear"> '+
+	                  '  <a href="goods_detail.html" class="detail_mask"></a>'+
+	                   ' <div class="goods_pic">'+
+	                    '    <img src="../'+result[i].itemPicture+'" width="100%" alt="" />'+
+	                    '</div>'+
+	                    '<div class="goods_con">'+
+	                     '   <p class="tit order_title" id = "idTitle">'+result[i].itemName+'</p>'+
+	                      '  <div class="price clear">'+
+	                       '     <p class="rmb"><span class="rmb_num" id = "needPoints">'+result[i].itemEarnings+'</span></p>'+
+	                        '</div>'+
+	                    '</div>'+
+	                '</div>'+
+	                '<div class="chos_num clear" value = "'+result[i].itemEarnings+'">'+
+	                 '   <input type="button" value="+" class="jia" id = "add" onclick = "addNum(this)"/>'+
+	                  ' <span  style = "display:none">'+result[i].itemEarnings+'</span> '+
+	                  '  <span class="exch_num">'+result[i].itemNum+'</span>'+
+	                   ' <input type="button" value="-" class="jian" id = "reduce" onclick = "reduceNum(this)"/>'+
+	                '</div>'+
+	            '</div>';
+	            totalMoney = totalMoney+parseInt(result[i].itemEarnings)*parseInt(result[i].itemNum);
+    		   shopGoodsDetail.append(panel);
+    	   }
+    	   $("#totalMoney").html(totalMoney);
+       }
+       
+       /*兑换商品 **/
+       function exchangeGoods(){
+    	   var totalMoney = parseInt($("#totalMoney").html());
+    	   return location.href='payment.html?totalMoney='+totalMoney+'&orderId='+orderId+"&orderNo="+orderNo;
+       }
+       
+       /****编辑地址 *********/
+       function updatePosition(){
+    	   return location.href="../addressList.html?orderId="+orderId;
+       }
+    </script>
+</body>
+</html>

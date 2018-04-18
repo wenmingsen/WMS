@@ -1,0 +1,206 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<parent>
+		<artifactId>DrtFramework</artifactId>
+		<groupId>com.csg.platform</groupId>
+		<version>1.0-SNAPSHOT</version>
+		<relativePath>../../pom.xml</relativePath>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.csg.app</groupId>
+	<artifactId>drtShop</artifactId>
+	<packaging>war</packaging>
+
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+
+	<dependencies>
+		<!-- spring security 3 -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+			<version>${org.springframework.spring-security.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.security</groupId>
+					<artifactId>spring-security-crypto</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-net</groupId>
+			<artifactId>commons-net</artifactId>
+			<version>3.3</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+			<version>1.4</version>
+		</dependency>
+
+	</dependencies>
+	<build>
+		<finalName>drtShop</finalName>
+		<pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.8</version>
+				<executions>
+					<execution>
+						<id>prepare-dependencies-repackage-copy</id>
+						<phase>generate-resources</phase>
+						
+						<goals>
+							<goal>run</goal>
+							
+						</goals>
+						<configuration>
+							<tasks>
+								<copy todir="src/main/java/com/csg" overwrite="true">
+									<fileset dir="../../drt_common/workspace/src/main/java/com/csg">
+										<include name="**" />
+									</fileset>
+								</copy>
+							</tasks>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.2</version>
+				<configuration>
+					<!-- 把buildNum写进 /META-INF/MANIFEST.MF ,其中${env.BUILD_NUMBER}是build服务器构建时的一个变量号码 -->
+					<archive>
+						<manifest>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+						</manifest>
+						<manifestEntries>
+							<Implementation-Build>${env.BUILD_NUMBER}</Implementation-Build>
+						</manifestEntries>
+					</archive>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>war</goal>
+						</goals>
+						<!-- 增加生成一个不带jar的迷你war包，避免每次发布都上传重复的巨大的JAR包 -->
+						<configuration>
+							<packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>
+							<warName>miniDrtShop</warName>
+							<!-- 把buildNum写进 /META-INF/MANIFEST.MF -->
+							<archive>
+								<manifest>
+									<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+								</manifest>
+								<manifestEntries>
+									<Implementation-Build>${env.BUILD_NUMBER}</Implementation-Build>
+								</manifestEntries>
+							</archive>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<configuration>
+						<source>1.8</source>
+						<target>1.8</target>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-antrun-plugin</artifactId>
+					<version>1.8</version>
+					<executions>
+						<execution>
+							<id>prepare-dependencies-repackage-copy</id>
+							<phase>generate-resources</phase>
+
+							<goals>
+								<goal>run</goal>
+
+							</goals>
+							<configuration>
+								<tasks>
+									<copy todir="src/main/java/com/csg" overwrite="true">
+										<fileset dir="../../drt_common/workspace/src/main/java/com/csg">
+											<include name="**" />
+										</fileset>
+									</copy>
+								</tasks>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+
+				<plugin>
+					<artifactId>maven-war-plugin</artifactId>
+					<version>2.2</version>
+					<configuration>
+						<!-- 把buildNum写进 /META-INF/MANIFEST.MF ,其中${env.BUILD_NUMBER}是build服务器构建时的一个变量号码 -->
+						<archive>
+							<manifest>
+								<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+							</manifest>
+							<manifestEntries>
+								<Implementation-Build>${env.BUILD_NUMBER}</Implementation-Build>
+							</manifestEntries>
+						</archive>
+					</configuration>
+					<executions>
+						<execution>
+							<phase>package</phase>
+							<goals>
+								<goal>war</goal>
+							</goals>
+							<!-- 增加生成一个不带jar的迷你war包，避免每次发布都上传重复的巨大的JAR包 -->
+							<configuration>
+								<packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>
+								<warName>miniDrtShop</warName>
+								<!-- 把buildNum写进 /META-INF/MANIFEST.MF -->
+								<archive>
+									<manifest>
+										<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+									</manifest>
+									<manifestEntries>
+										<Implementation-Build>${env.BUILD_NUMBER}</Implementation-Build>
+									</manifestEntries>
+								</archive>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+>>>>>>> .r8663
+		</pluginManagement>
+	</build>
+
+</project>

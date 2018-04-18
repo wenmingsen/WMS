@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>商城首页</title>
+    <link rel="stylesheet" type="text/css" href="css/weui.css" />
+    <link rel="stylesheet" type="text/css" href="css/swiper.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/public.css" />
+    <link rel="stylesheet" type="text/css" href="css/mall.css" />
+</head>
+<body style="background:#f6f6f6;">
+    <div class="container">
+        <div class="head">
+            <div class="head_navbar">
+                <div class="head_navbar_left">
+                    <a class="w-h-35" href="javascript:;" onClick="javascript :history.back(-1);"><i class="back_before"></i></a>
+                </div>
+                <div class="head_navbar_item">商城</div>
+            </div>
+        </div>
+        <div class="look_title">
+            <i></i>
+            <span>大家都在看</span>
+        </div>
+        <div class="mall_goods clear"id="shopid">
+            
+        </div>
+        <div style="padding-left:16%;" id="fy">
+          <input type="hidden" id="pageNumber" name="pageNumber" value="1"/>
+          <input type="hidden" id="pageSize" name="pageSize" value="4"/>
+          <input type="hidden" id="totalPageNum" name="totalPageNum"/>
+          <span id="spanFirst"><a href="javascript:paging('first')">首页</a></span>
+          <span id="spanPre"><a href="javascript:paging('lastPage')" >上一页</a></span>
+          <span id="spanNext"><a href="javascript:paging('nextPage')" >下一页</a></span>
+          <span id="spanLast"><a href="javascript:paging('trailerPage')">尾页</a></span> 
+                                     第<span id="spanPageNum"></span>页/共<span id="spanTotalPage"></span>页      
+        </div>
+        
+     <!--    <div class="weui-tabbar">
+            <a href="mall_index.html" class="weui-tabbar__item weui-bar__item_on">
+                <img src="css/img/index_icon2.png"alt="" class="weui-tabbar__icon">
+                <p class="weui-tabbar__label">主页</p>
+            </a>
+            <a href="shop_cart.html" class="weui-tabbar__item">
+                <img src="css/img/shop_icon1.png" alt="" class="weui-tabbar__icon">
+                <p class="weui-tabbar__label">购物车</p>
+            </a>
+            <a href="me.html" class="weui-tabbar__item">
+                <img src="css/img/order_icon1.png" alt="" class="weui-tabbar__icon">
+                <p class="weui-tabbar__label">我</p>
+            </a>
+        </div> -->
+        <div style="height:80px;"></div>
+    </div>
+    <script type="text/javascript" src="js/swiper.min.js"></script>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="common/common.js"></script>
+    
+    <script type="text/javascript">
+    $(function(){
+    	queryshop();
+    });
+        var ctx="/"+getRoot();
+        //var ctx="http://localhost:8090/drtShop"
+        var swiper = new Swiper('.swiper-container', {
+            pagination: '.swiper-pagination',
+            nextButton: '.swiper-button-next',
+            prevButton: '.swiper-button-prev',
+            paginationClickable: true,
+            spaceBetween: 30,
+            centeredSlides: true,
+            autoplay: 2500,
+            autoplayDisableOnInteraction: false
+        });
+        function queryshop(){
+        	var accountId=getUrlParam("accountId");
+        	
+        	var data={};
+        	data.accountId=accountId;
+        	data.pageSize=$("#pageSize").val();
+        	data.pageNumber=$("#pageNumber").val();
+        	$.ajax({
+				url : ctx+'/ins/drtShopItem/queryshop',
+				// data: {userId:selectContent[0].userId},
+				data : data,
+				type : "Post",
+				//traditional : true,
+				success : function(result) {
+					if(result!=null){
+						$("#pageNumber").val(result.pageNumber);
+						$("#totalPageNum").val(result.totalPageNum);
+						$("#spanPageNum").html(result.pageNumber);
+						$("#spanTotalPage").html(result.totalPageNum);
+						if(result.list.length>0){
+							for(var i=0;i<result.list.length;i++){
+				        		 var  html=" <div class='goods_item'> <a href='orderGoods/goods_detail.html?id="+result.list[i].id+"' class='goods_item_detail'></a><div class='good_item_pic'>"+
+				                    "<div class='hot_icon'></div>"+
+				                    "<img src='"+result.list[i].itemPicture+"' width='100%' alt='' /> </div>"+
+				               "<p class='goods_na'>"+result.list[i].itemText+"</p>"+
+				                "<div class='price clear'>"+
+				                    "<div class='rmb'><p><span class='num'>¥</span>"+result.list[i].itemEarnings+"</p></div></div></div>"
+				        		$("#shopid").append(html); 
+				        	}
+						}
+					}else{
+						//$("#spanTotalPage").hidd();
+					}
+				}
+			});
+        	
+        }
+        
+        /**获取地址栏参数*/
+        function  getUrlParam(name){
+        	var reg=new RegExp("(^|&)"+name+"=([^&]*)($\$)");
+            var param=window.location.search.substr(1).match(reg);
+            if(param!=null){
+            	return unescape(param[2]);
+            } 
+           
+            return null;
+        }
+       
+        function paging(state){
+        	var states=['first','lastPage','nextPage','trailerPage'];
+        	if(state=='first'){
+        		$("#pageNumber").val(1);
+        	}else if(state=='lastPage'){
+        		if($("#pageNumber").val()==1){
+        			return
+        		}
+        		$("#pageNumber").val(parseInt($("#pageNumber").val())-1);
+        	}else if(state=='nextPage'){
+        		if($("#pageNumber").val()==$("#totalPageNum").val()){
+        			return;
+        		}
+        		$("#pageNumber").val(parseInt($("#pageNumber").val())+1);
+        	}else{
+        		$("#pageNumber").val($("#totalPageNum").val());
+        	}
+        	$("#shopid").html("");
+        	 queryshop();
+        }
+    </script>
+</body>
+</html>

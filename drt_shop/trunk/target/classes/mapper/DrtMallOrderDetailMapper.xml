@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.csg.intshop.mapper.DrtMallOrderDetailMapper">
+	<resultMap id="BaseResultMap" type="com.csg.intshop.entity.DrtMallOrderDetail">
+		<id column="id" property="id"></id>
+		<result column="order_id" property="orderId" />
+		<result column="order_code" property="orderCode" />
+		<result column="item_id" property="itemId" />
+		<result column="sku_id" property="skuId" />
+		<result column="sku_code" property="skuCode" />
+		<result column="sku_name" property="skuName" />
+		<result column="img_url" property="imgUrl" />
+		<result column="sku_price" property="skuPrice" />
+		<result column="buy_amt" property="buyAmt" />
+		<result column="sku_earnings" property="skuEarnings" />
+		<result column="subtotal_price" property="subtotalPrice" />
+		<result column="subtotal_earnings" property="subtotalEarnings" />
+		<result column="purchase_cat_id" property="purchaseCatId" />
+		<result column="purchase_cat_name" property="purchaseCatName" />
+		<result column="brand_id" property="brandId" />
+		<result column="brand_name" property="brandName" />
+		<result column="company_id" property="companyId" />
+		<result column="company_name" property="companyName" />
+		<result column="store_code" property="storeCode" />
+		<result column="store_name" property="storeName" />
+		<result column="creator_id" property="creatorId" />
+		<result column="creator_name" property="creatorName" />
+		<result column="create_time" property="createTime" />
+		<result column="last_modifier_id" property="lastModifierId" />
+		<result column="last_modifier_name" property="lastModifierName" />
+		<result column="last_modifier_time" property="lastModifierTime" />
+		<result column="is_delete" property="isDelete" />
+	</resultMap>
+	
+	<sql id="BaseColumnList">
+		id as id,
+		order_id as orderId,
+		order_code as orderCode,
+		item_id as itemId,
+		sku_id as skuId,
+		sku_code as skuCode,
+		sku_name as skuName,
+		img_url as imgUrl,
+		sku_price as skuPrice,
+		buy_amt as buyAmt,
+		sku_earnings as skuEarnings,
+		subtotal_price as subtotalPrice,
+		subtotal_earnings as subtotalEarnings,
+		purchase_cat_id as purchaseCatId,
+		purchase_cat_name as purchaseCatName,
+		brand_id as brandId,
+		brand_name as brandName,
+		company_id as companyId,
+		company_name as companyName,
+		store_code as storeCode,
+		store_name as storeName,
+		creator_id as creatorId,
+		creator_name as creatorName,
+		create_time as createTime,
+		last_modifier_id as lastModifierId,
+		last_modifier_name as lastModifierName,
+		last_modifier_time as lastModifierTime,
+		is_delete as isDelete
+	</sql>
+
+	<sql id="BaseCustomQueryCondition">
+		<if test="id != null">
+			and id=#{id}
+		</if>	
+		<if test="orderId != null">
+			and order_id=#{orderId}
+		</if>	
+		<if test="orderCode != null">
+			and order_code=#{orderCode}
+		</if>	
+		<if test="itemId != null">
+			and item_id=#{itemId}
+		</if>	
+		<if test="skuId != null">
+			and sku_id=#{skuId}
+		</if>	
+		<if test="skuCode != null">
+			and sku_code=#{skuCode}
+		</if>	
+		<if test="skuName != null">
+			and sku_name=#{skuName}
+		</if>	
+		<if test="imgUrl != null">
+			and img_url=#{imgUrl}
+		</if>	
+		<if test="skuPrice != null">
+			and sku_price=#{skuPrice}
+		</if>	
+		<if test="buyAmt != null">
+			and buy_amt=#{buyAmt}
+		</if>	
+		<if test="skuEarnings != null">
+			and sku_earnings=#{skuEarnings}
+		</if>	
+		<if test="subtotalPrice != null">
+			and subtotal_price=#{subtotalPrice}
+		</if>	
+		<if test="subtotalEarnings != null">
+			and subtotal_earnings=#{subtotalEarnings}
+		</if>	
+		<if test="purchaseCatId != null">
+			and purchase_cat_id=#{purchaseCatId}
+		</if>	
+		<if test="purchaseCatName != null">
+			and purchase_cat_name=#{purchaseCatName}
+		</if>	
+		<if test="brandId != null">
+			and brand_id=#{brandId}
+		</if>	
+		<if test="brandName != null">
+			and brand_name=#{brandName}
+		</if>	
+		<if test="companyId != null">
+			and company_id=#{companyId}
+		</if>	
+		<if test="companyName != null">
+			and company_name=#{companyName}
+		</if>	
+		<if test="storeCode != null">
+			and store_code=#{storeCode}
+		</if>	
+		<if test="storeName != null">
+			and store_name=#{storeName}
+		</if>	
+		<if test="creatorId != null">
+			and creator_id=#{creatorId}
+		</if>	
+		<if test="creatorName != null">
+			and creator_name=#{creatorName}
+		</if>	
+		<if test="createTime != null">
+			and create_time=#{createTime}
+		</if>	
+		<if test="lastModifierId != null">
+			and last_modifier_id=#{lastModifierId}
+		</if>	
+		<if test="lastModifierName != null">
+			and last_modifier_name=#{lastModifierName}
+		</if>	
+		<if test="lastModifierTime != null">
+			and last_modifier_time=#{lastModifierTime}
+		</if>	
+		and is_delete=1
+	</sql>
+
+	<insert id="insert" parameterType="com.csg.intshop.entity.DrtMallOrderDetail" >
+    	insert into drt_mall_order_detail
+    		(id, order_id, order_code, item_id, sku_id, sku_code, sku_name, img_url, sku_price, buy_amt, sku_earnings, subtotal_price, subtotal_earnings, purchase_cat_id, purchase_cat_name, brand_id, brand_name, company_id, company_name, store_code, store_name, creator_id, creator_name, create_time, last_modifier_id, last_modifier_name, last_modifier_time, is_delete) 
+    	values
+    		(#{id}, #{orderId}, #{orderCode}, #{itemId}, #{skuId}, #{skuCode}, #{skuName}, #{imgUrl}, #{skuPrice}, #{buyAmt}, #{skuEarnings}, #{subtotalPrice}, #{subtotalEarnings}, #{purchaseCatId}, #{purchaseCatName}, #{brandId}, #{brandName}, #{companyId}, #{companyName}, #{storeCode}, #{storeName}, #{creatorId}, #{creatorName}, #{createTime}, #{lastModifierId}, #{lastModifierName}, #{lastModifierTime}, #{isDelete})
+  	</insert>
+
+  	<insert id="insertList" parameterType="java.util.List" >
+    	insert into drt_mall_order_detail
+    		(id, order_id, order_code, item_id, sku_id, sku_code, sku_name, img_url, sku_price, buy_amt, sku_earnings, subtotal_price, subtotal_earnings, purchase_cat_id, purchase_cat_name, brand_id, brand_name, company_id, company_name, store_code, store_name, creator_id, creator_name, create_time, last_modifier_id, last_modifier_name, last_modifier_time, is_delete) 
+    	values
+    	<foreach collection="list" index="index" item="item" separator=",">
+    		(#{item.id}, #{item.orderId}, #{item.orderCode}, #{item.itemId}, #{item.skuId}, #{item.skuCode}, #{item.skuName}, #{item.imgUrl}, #{item.skuPrice}, #{item.buyAmt}, #{item.skuEarnings}, #{item.subtotalPrice}, #{item.subtotalEarnings}, #{item.purchaseCatId}, #{item.purchaseCatName}, #{item.brandId}, #{item.brandName}, #{item.companyId}, #{item.companyName}, #{item.storeCode}, #{item.storeName}, #{item.creatorId}, #{item.creatorName}, #{item.createTime}, #{item.lastModifierId}, #{item.lastModifierName}, #{item.lastModifierTime}, #{item.isDelete})
+    	</foreach>
+  	</insert>
+
+  	<update id="delete" parameterType="java.lang.String">
+		update drt_mall_order_detail set is_delete=0 where id = #{id}
+    </update>
+
+  	<update id="update" parameterType="com.csg.intshop.entity.DrtMallOrderDetail">
+		update drt_mall_order_detail set
+		order_id=#{orderId}, order_code=#{orderCode}, item_id=#{itemId}, sku_id=#{skuId}, sku_code=#{skuCode}, sku_name=#{skuName}, img_url=#{imgUrl}, sku_price=#{skuPrice}, buy_amt=#{buyAmt}, sku_earnings=#{skuEarnings}, subtotal_price=#{subtotalPrice}, subtotal_earnings=#{subtotalEarnings}, purchase_cat_id=#{purchaseCatId}, purchase_cat_name=#{purchaseCatName}, brand_id=#{brandId}, brand_name=#{brandName}, company_id=#{companyId}, company_name=#{companyName}, store_code=#{storeCode}, store_name=#{storeName}, creator_id=#{creatorId}, creator_name=#{creatorName}, create_time=#{createTime}, last_modifier_id=#{lastModifierId}, last_modifier_name=#{lastModifierName}, last_modifier_time=#{lastModifierTime}, is_delete=#{isDelete}
+		where id = #{id} and is_delete=1
+	</update>
+	
+	<update id="updateIfNotNull" parameterType="com.csg.intshop.entity.DrtMallOrderDetail">
+		update drt_mall_order_detail set
+		<if test="orderId != null">
+			order_id=#{orderId}, 
+		</if>
+		<if test="orderCode != null">
+			order_code=#{orderCode}, 
+		</if>
+		<if test="itemId != null">
+			item_id=#{itemId}, 
+		</if>
+		<if test="skuId != null">
+			sku_id=#{skuId}, 
+		</if>
+		<if test="skuCode != null">
+			sku_code=#{skuCode}, 
+		</if>
+		<if test="skuName != null">
+			sku_name=#{skuName}, 
+		</if>
+		<if test="imgUrl != null">
+			img_url=#{imgUrl}, 
+		</if>
+		<if test="skuPrice != null">
+			sku_price=#{skuPrice}, 
+		</if>
+		<if test="buyAmt != null">
+			buy_amt=#{buyAmt}, 
+		</if>
+		<if test="skuEarnings != null">
+			sku_earnings=#{skuEarnings}, 
+		</if>
+		<if test="subtotalPrice != null">
+			subtotal_price=#{subtotalPrice}, 
+		</if>
+		<if test="subtotalEarnings != null">
+			subtotal_earnings=#{subtotalEarnings}, 
+		</if>
+		<if test="purchaseCatId != null">
+			purchase_cat_id=#{purchaseCatId}, 
+		</if>
+		<if test="purchaseCatName != null">
+			purchase_cat_name=#{purchaseCatName}, 
+		</if>
+		<if test="brandId != null">
+			brand_id=#{brandId}, 
+		</if>
+		<if test="brandName != null">
+			brand_name=#{brandName}, 
+		</if>
+		<if test="companyId != null">
+			company_id=#{companyId}, 
+		</if>
+		<if test="companyName != null">
+			company_name=#{companyName}, 
+		</if>
+		<if test="storeCode != null">
+			store_code=#{storeCode}, 
+		</if>
+		<if test="storeName != null">
+			store_name=#{storeName}, 
+		</if>
+		<if test="creatorId != null">
+			creator_id=#{creatorId}, 
+		</if>
+		<if test="creatorName != null">
+			creator_name=#{creatorName}, 
+		</if>
+		<if test="createTime != null">
+			create_time=#{createTime}, 
+		</if>
+		<if test="lastModifierId != null">
+			last_modifier_id=#{lastModifierId}, 
+		</if>
+		<if test="lastModifierName != null">
+			last_modifier_name=#{lastModifierName}, 
+		</if>
+		<if test="lastModifierTime != null">
+			last_modifier_time=#{lastModifierTime}, 
+		</if>
+		is_delete=1
+		where id = #{id} and is_delete=1
+	</update>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+	    select 
+	    <include refid="BaseColumnList" />
+	    from drt_mall_order_detail
+	    where 
+			id = #{id}
+  	</select>
+
+  	<select id="selectList" resultMap="BaseResultMap" parameterType="com.csg.intshop.entity.DrtMallOrderDetail">
+	    select 
+	    <include refid="BaseColumnList" />
+	    from drt_mall_order_detail
+	    where 1=1
+	    <include refid="BaseCustomQueryCondition" />
+  	</select>
+	
+	<select id="selectListByinterface" resultMap="BaseResultMap" parameterType="com.csg.intshop.entity.DrtMallOrderDetail">
+	    select 
+	    <include refid="BaseColumnList" />
+	    from drt_mall_order_detail
+	    where 1=1
+	    <if test="orderCode != null">
+			and order_code=#{orderCode}
+		</if>	
+  	</select>
+
+	
+</mapper>

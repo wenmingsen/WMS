@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>充值</title>
+    <link rel="stylesheet" type="text/css" href="../css/weui.css" />
+    <link rel="stylesheet" type="text/css" href="../css/public.css" />
+    <link rel="stylesheet" type="text/css" href="../css/mall.css" />
+    <style type="text/css">
+    input[type="radio"] {
+      margin: 3px 3px 0px 5px;
+      display: none;
+    }
+    .weui-cell__hd i{
+      padding-left: 20px;
+      cursor: pointer;
+      background: url(css/img/checked.png) no-repeat;
+      background-size: contain;
+    }
+    .weui-cell__hd i.checked {
+      background: url(css/img/checked_2.png) no-repeat;
+      background-size: contain;
+    }
+    .weui-label{
+        width:100px;
+    }
+    </style>
+</head>
+<body style="background:#f6f6f6;">
+    <div class="container">
+        <div class="head">
+            <div class="head_navbar">
+                <div class="head_navbar_left">
+                    <a class="w-h-35" href="javascript:;" onClick="javascript :history.back(-1);"><i class="back_before"></i></a>
+                </div>
+                <div class="head_navbar_item">充值</div>
+            </div>
+        </div>
+        <div class="top_up_type">
+            请选择充值方式
+        </div>
+        <div class="weui-cells weui-cells_checkbox">
+            <label class="weui-cell weui-check__label" for="s11">
+                <div class="weui-cell__hd">
+                    <input type="radio" checked="checked" name="sport" value="nba">
+                    <i name="nba" class="checked" for="nba"></i>
+                </div>
+                <div class="weui-cell__bd">
+                    <img src="../css/img/wx_pay.png" width="80" alt="">
+                </div>
+            </label>
+            <label class="weui-cell weui-check__label" for="s12">
+                <div class="weui-cell__hd">
+                    <input type="radio" id="cba" name="sport" value="cba">
+                    <i name="cba" for="cba"></i>
+                </div>
+                <div class="weui-cell__bd">
+                    <img src="../css/img/zfb.png" width="60" alt="">
+                </div>
+            </label>
+        </div>
+        <div class="top_up_type">
+            请输入充值金额
+        </div>
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell weui-cell_warn">
+                <div class="weui-cell__hd"><label for="" class="weui-label">金额（¥）</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text">
+                </div>
+                <div class="weui-cell__ft" style="display:none;">
+                    <img src="../css/img/dele_icon.png" width="16" alt="" />
+                </div>
+            </div>
+        </div>
+        <a href="javascript:;" class="weui-btn weui-btn_primary" style="width:94%; margin-top:1.5rem;">确认充值</a>
+    </div>
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script type="text/javascript">
+         $(function() {
+              $('.weui-cell__hd i').click(function(){
+                var radioId = $(this).attr('name');
+                $('.weui-cell__hd i').removeAttr('class') && $(this).attr('class', 'checked');
+                $('input[type="radio"]').removeAttr('checked') && $('#' + radioId).attr('checked', 'checked');
+              });
+              // var val = $('.weui-input').html();
+              
+          });
+    </script>
+</body>
+</html>

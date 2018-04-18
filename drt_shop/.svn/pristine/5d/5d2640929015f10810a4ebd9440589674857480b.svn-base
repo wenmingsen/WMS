@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>收货信息</title>
+    <link rel="stylesheet" type="text/css" href="../css/weui.css" />
+    <link rel="stylesheet" type="text/css" href="../css/public.css" />
+    <link rel="stylesheet" type="text/css" href="../css/mall.css" />
+    <link rel="stylesheet" type="text/css" href="../css/address.css" />
+</head>
+<body style="background:#f6f6f6;" >
+    <div class="container">
+        <div class="head">
+            <div class="head_navbar" style = "background-color: #184f84;color:white">
+                <div class="head_navbar_left">
+                    <a href="javascript:history.go(-1);" class="w-h-35" ><i class="back_before"></i></a>
+                </div>
+                <div class="head_navbar_item">收货信息</div>
+            </div>
+            <div class="head_navbar_r save">
+              
+            </div>
+        </div>
+        <div class="rec_info" style="border-top:0;">
+            <div class="weui-cells weui-cells_form">
+                <div class="weui-cell pad_15">
+                    <div class="weui-cell__hd"><label class="weui-label">收货人：</label></div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" type="text" placeholder="" id = "name">
+                    </div>
+                </div>
+                <div class="weui-cell pad_15">
+                    <div class="weui-cell__hd"><label class="weui-label">联系电话 :</label></div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" type="number" id = "phone">
+                    </div>
+                </div>
+                 <div class="weui-cell pad_15">
+                 	<div id = "position" class = "position" style="width: 100%;">
+							<div><span style="width: 100%;">省份: <select id = "province" name = "province" onchange = "selectProvince()" style="margin-left: 7.6%;width: 75%; height:30px;margin-bottom:5px"></select></span></div>
+	                		<div><span style="width: 100%;">城市: <select id = "city" name = "city" onchange = "selectCity()" style="margin-left: 7.6%;width: 75%;height:30px;margin-bottom:5px"></select></span></div>
+	                		<div><span style="width: 100%;">县(区): <select id = town name = "town"  style="margin-left: 4.2%;width: 75%;height:30px;margin-bottom:5px"></select></span></div>
+					</div> 
+				</div>
+                <div class="weui-cell pad_15">
+                    <div class="weui-cell__hd"><label class="weui-label">收货地址 :</label></div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" type="text" id = "address_other">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+        	<div id = "ensure" onclick = "submitPosition()">保存</div>
+        </div>
+       
+    </div>
+     <script type="text/javascript" src="../js/jquery.min.js"></script>
+     <script type="text/javascript" src="../common/common.js"></script>
+    <script type="text/javascript">
+    /***************初始化修改地址 **************************/
+  	var orderId = null;
+  	var addressLevel1Id = null;
+  	var addressLevel2Id = null;
+  	var addressLevel3Id = null;
+  	var id = null;
+    $(function(){
+	    	//清楚已存地址信息  
+	    	$("#name").val();
+	    	$("#phone").val();
+	    	$("#address_other").val();
+    	 var str = location.search;
+  	 	 var idAll = str.split('=')[1];
+ 		 queryAdministrativeRgion(null,null);
+  	 	 if(str.search("orderId")==-1){
+  	 		 //修改地址 
+	  	 	 id = idAll.split("&")[0];
+	 		 addressLevel1Id = idAll.split("&")[1];
+	 		 addressLevel2Id = idAll.split("&")[2];
+	 		 addressLevel3Id = idAll.split("&")[3];
+	 		 orderId = idAll.split("&")[4];
+  	 		 queryAddress(id);
+  	 	 }else{
+  	 		 //新增地址 
+  	 		 orderId = idAll;
+  	 	 }
+    });
+	
+    
+    /********查询城市  **************/
+    function queryAdministrativeRgion(addressLevel1Id,addressLevel2Id){
+    	var url = "/"+getRoot()+"/ins/DAR/queryPCT";
+    	var params = {};
+    	if(addressLevel1Id){
+	    	params.addressLevel1Id = addressLevel1Id;
+    	}
+    	if(addressLevel2Id){
+	    	params.addressLevel2Id = addressLevel2Id;
+    	}
+    	$.ajax({
+	         type: "post",
+	         url: url,
+	         data: params,
+	         async:false,
+	         success: function(result){
+				 if(result.state == 0){
+					setAdministrativeRegion(result.data);
+				 }
+	         }
+	     });
+    }
+    
+    
+    /*******设置的城市***************/
+    function setAdministrativeRegion(result){
+    	if(result[0]){
+    		var province = result[0];
+    		var provinceP = $("#province");
+    		provinceP.empty();
+    		for(var i = 0 ;i <province.length; i++){
+    			provinceP.append("<option name = 'province' value = '"+province[i].administrativeRegionId+"'>"+province[i].administrativeRegionName+"</option>");
+    		}
+   			queryAdministrativeRgion($("#province").val(),null);
+    		return ;
+    	}
+    	if(result[1]){
+    		var city = result[1];
+    		var cityC = $("#city");
+    		cityC.empty();
+    		for(var i = 0 ;i <city.length; i++){
+    			cityC.append("<option name = 'city'  value = '"+city[i].administrativeRegionId+"'>"+city[i].administrativeRegionName+"</option>");
+    		}
+   			queryAdministrativeRgion(null,$("#city").val());
+    		return ;
+    	}
+    	if(result[2]){
+    		var town = result[2];
+    		var townT = $("#town");
+    		townT.empty();
+    		for(var i = 0 ;i <town.length; i++){
+    			townT.append("<option name = 'town' value = '"+town[i].administrativeRegionId+"'>"+town[i].administrativeRegionName+"</option>");
+    		}
+    	}
+    }
+    
+    /*******省份改变 ******************/
+    function selectProvince(){
+    	addressLevel1Id = $("#province").val();
+    	queryAdministrativeRgion(addressLevel1Id,null);
+    }
+    
+    /************城市改变 ****************/
+    function selectCity(){
+    	addressLevel2Id = $("#city").val();
+    	queryAdministrativeRgion(null,addressLevel2Id);
+    }
+    
+    /*****查询要修改的地址 **********/
+    function queryAddress(id){
+    	var url = "/"+getRoot()+"/ins/drtShopAddress/queryAddressList";
+    	var params = {};
+    	params.addressId = id;
+    	params.addressLevel1Id = addressLevel1Id;
+    	params.addressLevel2Id = addressLevel2Id;
+    	$.ajax({
+	         type: "post",
+	         url: url,
+	         data: params,
+	         success: function(result){
+				 if(result.state == 0){
+					 setPositionInfo(result.data);
+				 }
+	         }
+	     });
+    }
+    function setPositionInfo(result){
+    	if(!result[0]){
+    		return;
+    	}
+    	for(var i = 0 ;i < result.length; i++){
+    		if(result[i].addressId==id){
+    			$("#name").val(result[i].name);
+    	    	$("#phone").val(result[i].phone);
+    	    	$("#province").val(result[i].addressLevel1Id);
+    	    	selectProvince();
+    	    	$("#city").val(result[i].addressLevel2Id);
+    	    	selectCity();
+    	    	$("#town").val(result[i].addressLevel3Id);
+    	    	$("#address_other").val(result[i].addressOther);
+    	    	$(".container").data("id",result[i].addressId);
+    	    	break;
+    		}
+    	}
+    	
+    }
+    /************保存地址 *************************/
+    function submitPosition(){
+    	var url = null;
+		var params = {};
+		var id = $(".container").data("id");
+		if(id){
+			params.addressId = id ;
+			url = "/"+getRoot()+"/ins/drtShopAddress/updateAddress";
+		}else{
+			url = "/"+getRoot()+"/ins/drtShopAddress/addAddress";
+		}
+ 		var name = $("#name").val();
+ 		var phone = $("#phone").val();
+ 		var addressOther = $("#address_other").val();
+ 		var flag = checkedInfo(name,phone,addressOther);
+ 		if(!flag){
+ 			return;
+ 		}
+ 		params.name = name;
+ 		params.phone = phone;
+ 		params.addressOther = addressOther;
+ 		params.addressLevel1Id = $("#province").val();
+ 		$("select option[name = 'province']").each(function(){
+ 			if($(this).is(":checked")){
+ 				params.addressLevel1 = $(this).text();
+ 			}
+ 		});
+ 		params.addressLevel2Id = $("#city").val();
+ 		$("select option[name = 'city']").each(function(){
+ 			if($(this).is(":checked")){
+ 				params.addressLevel2 = $(this).text();
+ 			}
+ 		});
+ 		params.addressLevel3Id = $("#town").val();
+ 		$("select option[name = 'town']").each(function(){
+ 			if($(this).is(":checked")){
+ 				params.addressLevel3 = $(this).text();
+ 			}
+ 		})
+ 		
+ 		 $.ajax({
+ 	         type: "post",
+ 	         url: url,
+ 	         data: params,
+ 	         success: function(result){
+ 	        	if(result.message){
+   	        	 Toast(result.message,2000);
+	        	 }
+ 	        	if(result.state==0){
+ 	        		$(".container").data("id",result.data);
+ 	        	}
+ 	         }
+ 	     });
+    }
+    
+    
+    /*******校验 *******/
+    function checkedInfo(name,phone,addressOther){
+    	name =  $.trim(name);
+   		if(!name){
+   			Toast("收货人不能为空 ",2000);
+   			return false;
+   		}
+   		var regx = /^((0\d{2,3})-)(\d{7,8})(-(\d{3,}))?$/;
+   		var regx1 = /[0-9]{11}/;
+   		if(!regx.test(phone)){
+   			if(!regx1.test(phone)){
+	   			Toast("请填写正确联系方式 ,如：13916752109或0712-3614072",2000);
+	   			return false;
+   			}
+   		}
+   		addressOther = $.trim(addressOther);
+   		if(!addressOther){
+   			Toast("收货地址不能为空  ",2000);
+   			return false;
+   		}
+   		return true;
+    }
+    </script>
+</body>
+</html>

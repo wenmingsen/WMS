@@ -1,0 +1,118 @@
+ <!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>商城首页</title>
+    <link rel="stylesheet" type="text/css" href="css/weui.css" />
+    <link rel="stylesheet" type="text/css" href="css/swiper.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/public.css" />
+    <link rel="stylesheet" type="text/css" href="css/mall.css" />
+</head>
+<body style="background:#f6f6f6;">
+    <div class="container">
+        <div class="head">
+            <div class="head_navbar"  style = "background-color: #184f84;color:white">
+                <div class="head_navbar_left">
+                    <a class="w-h-35" href="javascript:;" onClick="javascript :history.back(-1);"><i class="back_before"></i></a>
+                </div>
+                <div class="head_navbar_item">商城</div>
+            </div>
+        </div>
+        <div class="look_title">
+            <i></i>
+            <span id="info">大家都在看</span>
+        </div>
+        <div class="mall_goods clear"id="shopid">
+            
+        </div>
+       
+        
+     <!--    <div class="weui-tabbar">
+            <a href="mall_index.html" class="weui-tabbar__item weui-bar__item_on">
+                <img src="css/img/index_icon2.png"alt="" class="weui-tabbar__icon">
+                <p class="weui-tabbar__label">主页</p>
+            </a>
+            <a href="shop_cart.html" class="weui-tabbar__item">
+                <img src="css/img/shop_icon1.png" alt="" class="weui-tabbar__icon">
+                <p class="weui-tabbar__label">购物车</p>
+            </a>
+            <a href="me.html" class="weui-tabbar__item">
+                <img src="css/img/order_icon1.png" alt="" class="weui-tabbar__icon">
+                <p class="weui-tabbar__label">我</p>
+            </a>
+        </div> -->
+        <div style="height:80px;"></div>
+    </div>
+    <script type="text/javascript" src="js/swiper.min.js"></script>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="common/common.js"></script>
+    
+    <script type="text/javascript">
+    $(function(){
+    	queryshop();
+    });
+        var ctx="/"+getRoot();
+        //var ctx="http://localhost:8090/drtShop"
+        var swiper = new Swiper('.swiper-container', {
+            pagination: '.swiper-pagination',
+            nextButton: '.swiper-button-next',
+            prevButton: '.swiper-button-prev',
+            paginationClickable: true,
+            spaceBetween: 30,
+            centeredSlides: true,
+            autoplay: 2500,
+            autoplayDisableOnInteraction: false
+        });
+        function queryshop(){
+        	var accountId=getUrlParam("accountId");
+        	
+        	var data={};
+        	data.accountId=accountId;
+        	data.pageSize=$("#pageSize").val();
+        	data.pageNumber=$("#pageNumber").val();
+        	$.ajax({
+				url : ctx+'/ins/drtShopItem/queryshop',
+				// data: {userId:selectContent[0].userId},
+				data : data,
+				type : "Post",
+				//traditional : true,
+				success : function(result) {
+					if(result==="-1"){
+						$("#info").html("请登录！");
+						return;
+					}
+					 if(result!=null){
+ 						if(result.length>0){
+							for(var i=0;i<result.length;i++){
+				        		 var  html=" <div class='goods_item'> <a href='orderGoods/goods_detail.html?id="+result[i].id+"' class='goods_item_detail'></a><div class='good_item_pic'>"+
+				                    "<div class='hot_icon'></div>"+
+				                    "<img src='"+fileServer+result[i].itemPicture+"' width='100%' alt='' /> </div>"+
+				               "<p class='goods_na'>"+result[i].itemName+"</p>"+
+				                "<div class='price clear'>"+
+				                    "<div class='rmb'><p><span class='num'>积分</span>&nbsp;&nbsp;"+result[i].itemEarnings+"</p></div></div></div>"
+				        		$("#shopid").append(html); 
+				        	}
+						}
+					}else{
+						$("#shopid").html("暂时未有积分兑换的商品，敬请期待！");
+					}
+				}
+			});
+        	
+        }
+        
+        /**获取地址栏参数*/
+        function  getUrlParam(name){
+        	var reg=new RegExp("(^|&)"+name+"=([^&]*)($\$)");
+            var param=window.location.search.substr(1).match(reg);
+            if(param!=null){
+            	return unescape(param[2]);
+            } 
+           
+            return null;
+        }
+       
+    </script>
+</body>
+</html>

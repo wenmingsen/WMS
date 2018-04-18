@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>付款</title>
+    <link rel="stylesheet" type="text/css" href="../css/weui.css" />
+    <link rel="stylesheet" type="text/css" href="../css/public.css" />
+    <link rel="stylesheet" type="text/css" href="../css/mall.css" />
+    <style type="text/css">
+    .weui-cell{
+        border-bottom:1px solid #dedede;
+        padding:.85rem;
+    }
+    .weui-cell:before{
+        border-top: 0;
+    }
+    </style>
+</head>
+<body style="background:#f6f6f6;">
+    <div class="container">
+        <div class="head">
+            <div class="head_navbar">
+                <div class="head_navbar_left">
+                    <a class="w-h-35" href="javascript:;" onClick="javascript :history.back(-1);"><i class="back_before"></i></a>
+                </div>
+                <div class="head_navbar_item">兑换</div>
+            </div>
+        </div>
+        <div class="weui-cells">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <p>商品共计</p>
+                </div>
+                <div class="weui-cell__ft"><span id = "totalMoney">00</span>积分</div>
+            </div>
+        </div>
+        <span  class="ensure" onclick = "ensureExchange()">确定</span>    
+    </div>
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../common/common.js"></script>
+    <script type="text/javascript">
+   		var totalMoney =null;
+   		var orderId = null;
+   		var orderNo = null;
+         $(function(){
+        	 var str = location.search;
+        	  totalMoney = str.split('=')[1].split("&")[0];
+        	  orderId = str.split('=')[2].split("&")[0];
+        	  orderNo = str.split('=')[3];
+        	 $("#totalMoney").html(totalMoney);
+         })
+         
+         /* 确认兑换 **/
+         function ensureExchange(){
+        	var url = "/"+getRoot()+"/ins/drtShopCart/ensureExchange";
+     		var params = {};
+     		params.totalMoney = totalMoney;
+     		params.orderId = orderId;
+     		params.orderNo = orderNo;
+     		 $.ajax({
+     	         type: "post",
+     	         url: url,
+     	         data: params,
+     	         success: function(result){     			
+     	        	Toast(result.message,2000);
+     	        	if(result.state==0){
+     	        		$(".ensure").attr("onclick","test()");
+     	        	}
+     	         }
+     	     });
+         }
+         /***********/
+         function test(){
+        	 Toast("该订单已兑换 ",2000);
+         }
+         
+         
+    </script>
+</body>
+</html>

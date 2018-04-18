@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>收货信息</title>
+    <link rel="shortcut icon" href="../../css/img/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="../../css/weui.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/public.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/mall.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/address.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/mui.picker.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/mui.poppicker.css" />
+    
+<style>
+	input[type="search"]{-webkit-appearance:none;} 
+	.head_navbar_left a i{border-top: 2px solid #f4f4f4;border-left: 2px solid #f4f4f4;}
+</style> 
+</head>
+<body style="background:#f6f6f6;" >
+    <div class="container">
+        <div class="head">
+            <div class="head_navbar" style = "background-color: #184f84;color:white">
+                <div class="head_navbar_left">
+                    <a href="javascript:history.go(-1);" class="w-h-35" ><i class="back_before"></i></a>
+                </div>
+                <div class="head_navbar_item" style="font-size:17px;">收货信息</div>
+            </div>
+            <div class="head_navbar_r save">
+              
+            </div>
+        </div>
+        <div class="rec_info" style="border-top:0;">
+            <div class="weui-cells weui-cells_form" style = "margin-top: 48px;">
+                <div class="weui-cell pad_15">
+                    <div class="weui-cell__hd"><label class="weui-label"><span style = "color: black;">收货人：</span></label></div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" type="text"  id = "name" placeholder = "请输入收货人姓名">
+                    </div>
+                </div>
+                <div class="weui-cell pad_15">
+                    <div class="weui-cell__hd"><label class="weui-label"><span style = "color: black;">联系电话 ：</span></label></div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" type="number" id = "phone" placeholder="请输入联系方式 ">
+                    </div>
+                </div>
+                 <div class="weui-cell pad_15">
+                 	<div id='showCityPicker3' class="mui-btn mui-btn-block" style = "width:100%">
+						<span id='showCityPicker3' class="mui-btn mui-btn-block" >省市县(区)：</span><input id = "cityResult3"  readonly = "true" style = "width: 72%;font-size:18px" value = ""  onBlur = "closeCityAddress()"  placeholder="请选择地址">
+					</div> 
+				</div>
+                <div class="weui-cell pad_15">
+                    <div class="weui-cell__hd"><label class="weui-label"><span style = "color: black;">收货地址 ：</span></label></div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" type="text" id = "address_other" placeholder="请输入详细地址" maxlength="100">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+        	<div id = "ensure" onclick = "submitPosition()">保存</div>
+        </div>
+       
+    </div>
+     <script type="text/javascript" src="../../js/jquery.min.js"></script>
+     <script type="text/javascript" src="../../js/layer/layer.js"></script>
+     <script type="text/javascript" src="../../common/common.js"></script>
+     <script type="text/javascript" src="../../js/mui.min.js"></script>
+     <script type="text/javascript" src="../../js/mui.picker.js"></script>
+     <script type="text/javascript" src="../../js/mui.poppicker.js"></script>
+      <script type="text/javascript" src="../../js/cityData3.js"></script>
+    <script type="text/javascript">
+    /***************初始化修改地址 **************************/
+  	var strOrderId = null;
+  	var addressId = null;
+    $(function(){
+    
+    	 //清楚已存地址信息  
+    	// cityData();//地址库数据格式处理 方法 
+    	 $("#name").val();
+    	 $("#phone").val();
+    	 $("#address_other").val();
+    	 var addressId = location.search.split("=")[1];
+    	 var items = sessionStorage.getItem("data");
+    	 if(!items){
+    		 strOrderId = "backHistory";
+    	 }
+  	 	 if(addressId){
+  	 		 //修改地址 
+  	 		 queryAddress(addressId);
+  	 	 }
+    });
+	
+    
+   
+
+    /*****查询要修改的地址 **********/
+    function queryAddress(addressId){
+    	var url = getRootPath()+"/ins/drtShopAddress/queryAddressList";
+    	var params = {};
+    	params.addressId = addressId;
+    	$.ajax({
+	         type: "post",
+	         url: url,
+	         data: params,
+	         success: function(result){
+				 if(result.state == 0){
+					 setPositionInfo(result.data);
+				 }
+	         }
+	     });
+    }
+    function setPositionInfo(result){
+    	if(!result[0]){
+    		return;
+    	}
+		$("#name").val(result[0].name);
+    	$("#phone").val(result[0].phone);
+    	$("#cityResult3").val(result[0].addressLevel1+" "+result[0].addressLevel3+" "+result[0].addressLevel3);
+    	addressList[0]= result[0].addressLevel1Id;
+		addressList[1]= result[0].addressLevel1;
+		addressList[2]= result[0].addressLevel2Id;
+		addressList[3]= result[0].addressLevel2;
+		addressList[4]= result[0].addressLevel3Id;
+		addressList[5]= result[0].addressLevel3;
+    	$("#address_other").val(result[0].addressOther);
+    	$(".container").data("id",result[0].addressId);
+    }
+    /************保存地址 *************************/
+    function submitPosition(){
+    	var url = null;
+		var params = {};
+		var id = $(".container").data("id");
+		if(id){
+			params.addressId = id ;
+			url = getRootPath()+"/ins/drtShopAddress/updateAddress";
+		}else{
+			url = getRootPath()+"/ins/drtShopAddress/addAddress";
+			params.isDefault = 0;
+		}
+ 		var name = $("#name").val();
+ 		var phone = $("#phone").val();
+ 		var addressOther = $("#address_other").val();
+ 		var flag = checkedInfo(name,phone,addressOther);
+ 		if(!flag){
+ 			return;
+ 		}
+ 		params.name = name;
+ 		params.phone = phone;
+ 		params.addressOther = addressOther;
+ 		params.addressLevel1Id = addressList[0];
+ 		params.addressLevel1 = addressList[1];
+ 		params.addressLevel2Id = addressList[2];
+ 		params.addressLevel2 = addressList[3];
+ 		params.addressLevel3Id = addressList[4];
+ 		params.addressLevel3 = addressList[5];
+ 		
+ 		 $.ajax({
+ 	         type: "post",
+ 	         url: url,
+ 	         data: params,
+ 	         success: function(result){
+ 	        	if(result.message){
+   	        	 Toast(result.message,2000);
+	        	 }
+ 	        	if(result.state==0){
+ 	        		setTimeout(function(){
+ 	        			return location.href="addressList.html?"+strOrderId;
+ 	        		},1000);
+ 	        	}
+ 	         }
+ 	     });
+    }
+    
+    
+    /*******校验 *******/
+    function checkedInfo(name,phone,addressOther){
+    	name =  $.trim(name);
+   		if(!name){
+   			Toast("收货人不能为空 ",2000);
+   			return false;
+   		}
+   		var regx = /^((0\d{2,3})-)(\d{7,8})(-(\d{3,}))?$/;
+   		var regx1 = /^[0-9]{11}$/;
+   		if(!regx.test(phone)){
+   			if(!regx1.test(phone)){
+	   			Toast("请填写正确联系方式 ",2000);
+	   			return false;
+   			}
+   		}
+   		if(addressList.length==0){
+   			Toast("省市级不能为空 ",2000);
+   			return false;
+   		}
+   		addressOther = $.trim(addressOther);
+   		if(!addressOther){
+   			Toast("收货地址不能为空  ",2000);
+   			return false;
+   		}
+   		return true;
+    }
+    
+    
+    
+    /************************************/
+    
+    function queryAdministrativeRgions(addressLevel1Id,addressLevel2Id){
+    	var rest = null;
+    	var url = getRootPath()+"/ins/DAR/queryPCT";
+    	var params = {};
+    	if(addressLevel1Id){
+	    	params.addressLevel1Id = addressLevel1Id;
+    	}
+    	if(addressLevel2Id){
+	    	params.addressLevel2Id = addressLevel2Id;
+    	}
+    	$.ajax({
+	         type: "post",
+	         url: url,
+	         data: params,
+	         async:false,
+	         success: function(result){
+				 if(result.state == 0){
+					 rest = result.data;
+				 }
+	         }
+	     });
+    	if(rest[0]){
+	    	return rest[0];
+    	}else if(rest[1]){
+    		return rest[1];
+    	}else{
+    		return rest[2];
+    	}
+    }
+    
+   function cityData(){
+	   var cityData3 = [];
+	   var firstCity = queryAdministrativeRgions(null,null);
+	   for(var i = 0 ;i < firstCity.length; i++){
+		   var value1 = firstCity[i].administrativeRegionId;
+		   var secondCity = queryAdministrativeRgions(value1,null);
+		   var panel1 = {};
+		   if(secondCity){
+			   var children1 = [];
+			   panel1 = { 
+					   value : value1,
+				   	   text : firstCity[i].administrativeRegionName,
+				   	   children :children1
+				   	   };
+			   for(var j = 0 ; j < secondCity.length; j++){
+				   var value2 = secondCity[j].administrativeRegionId;
+				   var thirdCity = queryAdministrativeRgions(null,value2);
+				   var panel2 = {};
+				   if(thirdCity){
+					   var children2 = [];
+					   panel2 = {
+							   value : value2,
+						   	   text : secondCity[j].administrativeRegionName,
+						   	   children :children2
+					   			};
+					   for(var m = 0 ; m < thirdCity.length; m++){
+						   var value3 = thirdCity[m].administrativeRegionId;
+						   var panel3 = {
+								   		value : value3,
+								   		text : thirdCity[m].administrativeRegionName
+						   				};
+						   children2.push(panel3);
+					   }
+				   }else{
+					   panel2 = { 
+							   value : value2,
+						   	   text : secondCity[i].administrativeRegionName,
+						   	   };
+				   }
+				   children1.push(panel2);
+			   }
+		   }else{
+			   panel1 = { 
+					   value : value,
+				   	   text : firstCity[i].administrativeRegionName,
+				   	   };
+		   }
+		   cityData3.push(panel1);
+	   }
+	   console.log(JSON.stringify(cityData3));
+   }
+    
+   /*监听光标离开,关闭地址选项 */
+   function closeCityAddress(){
+	   cityPicker3.hide();
+   }
+  
+    /*设置城市 */
+   function setCityAddress(cityAddress){
+    	$("#cityResult3").val(cityAddress);
+    }
+   /****/
+    var addressList = [];
+    var cityPicker3;
+	(function($, doc) {
+		$.init();
+		$.ready(function() {
+			cityPicker3 = new $.PopPicker({
+				layer: 3
+			});
+			cityPicker3.setData(cityData3);
+			var showCityPickerButton = doc.getElementById('showCityPicker3');
+			var cityResult3 = doc.getElementById('cityResult3');
+			showCityPickerButton.addEventListener('tap', function(event) {
+				cityPicker3.show(function(items) {
+					var cityAddress =  (items[0] || {}).text + " " + (items[1] || {}).text + " " + (items[2] || {}).text;
+					setCityAddress(cityAddress);
+					addressList[0]=(items[0] || {}).value;
+					addressList[1]=(items[0] || {}).text;
+					addressList[2]=(items[1] || {}).value;
+					addressList[3]=(items[1] || {}).text;
+					addressList[4]=(items[2] || {}).value;
+					addressList[5]=(items[2] || {}).text;
+					//返回 false 可以阻止选择框的关闭
+					//return false;
+				});
+			}, false);
+		});
+	})(mui, document);
+   
+   
+  
+    
+    
+    </script>
+</body>
+</html>

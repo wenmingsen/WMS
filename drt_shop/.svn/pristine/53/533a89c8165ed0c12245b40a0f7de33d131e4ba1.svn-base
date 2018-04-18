@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport"
+	content="width=device-width,initial-scale=1,user-scalable=0">
+<title>订单详情</title>
+<link rel="shortcut icon" href="../../css/img/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" type="text/css" href="../../css/weui.css" />
+<link rel="stylesheet" type="text/css" href="../../css/public.css" />
+<link rel="stylesheet" type="text/css" href="../../css/mall.css" />
+<link rel="stylesheet" href="../../css/mui/mui.min.css">
+<link rel="stylesheet" type="text/css" href="../../css/orderDetail.css" />
+<link rel="stylesheet" type="text/css"
+	href="../../css/bootstrap.min.css" />
+<style type="text/css">
+    <style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+			.mui-bar~.mui-content .mui-fullscreen {
+				top: 44px;
+				height: auto;
+			}
+			.mui-pull-top-tips {
+				position: absolute;
+				top: -20px;
+				left: 50%;
+				margin-left: -25px;
+				width: 40px;
+				height: 40px;
+				border-radius: 100%;
+			}
+			.mui-bar~.mui-pull-top-tips {
+				top: 24px;
+			}
+			.mui-pull-top-wrapper {
+				width: 42px;
+				height: 42px;
+				display: block;
+				text-align: center;
+				background-color: #efeff4;
+				border: 1px solid #ddd;
+				border-radius: 25px;
+				background-clip: padding-box;
+				box-shadow: 0 4px 10px #bbb;
+				overflow: hidden;
+			}
+			.mui-pull-top-tips.mui-transitioning {
+				-webkit-transition-duration: 200ms;
+				transition-duration: 200ms;
+			}
+			.mui-pull-top-tips .mui-pull-loading {
+				margin: 0;
+			}
+			.mui-pull-top-wrapper .mui-icon,
+			.mui-pull-top-wrapper .mui-spinner {
+				margin-top: 7px;
+			}
+			.mui-pull-top-wrapper .mui-icon.mui-reverse {
+				/*-webkit-transform: rotate(180deg) translateZ(0);*/
+			}
+			.mui-pull-bottom-tips {
+				text-align: center;
+				background-color: #efeff4;
+				font-size: 15px;
+				line-height: 40px;
+				color: #777;
+			}
+			.mui-pull-top-canvas {
+				overflow: hidden;
+				background-color: #fafafa;
+				border-radius: 40px;
+				box-shadow: 0 4px 10px #bbb;
+				width: 40px;
+				height: 40px;
+				margin: 0 auto;
+			}
+			.mui-pull-top-canvas canvas {
+				width: 40px;
+			}
+			.mui-slider-indicator.mui-segmented-control {
+				background-color: #efeff4;
+			}
+			.modal-footer{
+				border:0px solid;
+				text-align:center;
+			}
+			#myModal{
+				margin-top:50%;
+			}
+			.container {
+			    padding-right: 0;
+			    padding-left: 0;
+			    margin-right: auto; 
+			    margin-left: auto;
+			}
+			html{
+				font-size:inherit;
+			}
+			.modal-dialog{
+				width: 70%;
+			   	margin-left: 15%;
+			}
+			.modal-header{
+				padding:0px;
+				border-bottom:0px solid;
+			}
+			.modal-body{
+				padding:10px;
+			}
+			.btn-info{
+				border:0px solid;
+				background-color:red;
+			}
+			.modal-footer{
+				padding:0px;
+				color:blue;
+			}
+			input, button, select, textarea {
+		   		line-height: initial;
+			}
+			.mui-bar {
+				background-color: #184f84;
+			}
+			.mui-bar .mui-title {
+				color: #f4f4f4;
+			}
+			.mui-bar .mui-icon {
+				color: #f4f4f4;
+			}
+		</style>
+</style>
+</head>
+<body style="background: #f6f6f6;">
+	<header class="mui-bar mui-bar-nav">
+	    <h1 class="mui-title">订单详情</h1>
+	    <span class="mui-icon mui-icon-left-nav mui-pull-left" onclick="javascript :history.back(-1);"></span>
+	    <span class="mui-icon mui-icon-home-filled mui-pull-right" onclick="goToMall()"></span>
+	</header>
+	<div class="container">
+		<div class="look_title" style="display: none" id="logindiv">
+			<i></i> <span id="info"></span>
+		</div>
+		<div id="shopid">
+			<div class="order_state_wrap">
+				<!-- 地址区 -->
+				<div class="rec_info" style="border-bottom: 5px solid #dedede;">
+					<div class="weui-cells weui-cells_form">
+						<div
+							style="width: 5%; float: left; margin-top: 1rem; text-align: right">
+							<span><a href="#"><span style="font-size: 20px"
+									class="glyphicon glyphicon-map-marker"></span></a></span>
+						</div>
+						<div style="width: 90%; float: left">
+							<div
+								style="margin: 5px 10px; font-size: 14px; width: 90%; float: none">
+								<div style="float: left">
+									收货人：<span id="name"></span>
+								</div>
+								<div style="float: right; text-align: right">
+									<span id="phone"></span>
+								</div>
+							</div>
+							<br>
+							<div style="margin: 5px 10px; font-size: 14px; float: none">
+								收货地址：<span id="address_other"></span>
+							</div>
+						</div>
+					</div>
+					<div id="colorChange"></div>
+				</div>
+				<!-- 店铺展示 -->
+		         <div class = "storeShow" style = "margin-bottom: 3rem;">
+		          	<!-- 购买商品展示区 -->
+			           
+		         </div>
+			</div>
+			<div class="set_acc clear" id = "operateColumn">
+				<div class="set_acc_l">
+					合计：<span><span class="num" id="totalMoney"></span> 积分</span>
+				</div>
+				<span onclick="exchangeGoods()" class="set_acc_r">兑换</span>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="../../js/jquery.min.js"></script>
+	<script type="text/javascript" src="../../js/layer/layer.js"></script>
+	<script type="text/javascript" src="../../common/common.js"></script>
+	<script type="text/javascript" src="../../js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+         $(function(){
+        	getGoodsId();
+         });
+         
+         /*获取订单id     */
+       function getGoodsId(){
+        	 var str = location.search;
+        	 var orderIds = str.split('=')[1];
+        		 queryOrderGoods(orderIds.split("&")[0]);
+        	 return orderIds.split("&")[0];
+         }
+         
+      
+        /*发送请求，到数据库查找产品信息 */
+    	function queryOrderGoods(orderIds){
+    		var url = getRootPath()+"/ins/mall/order/queryOrderDetail";
+    		var params = {};
+    		params.orderIds = orderIds;
+    		 $.ajax({
+    	         type: "post",
+    	         url: url,
+    	         data: params,
+    	         success: function(result){
+    				 if(result.state == 0){
+    					setOrderGoods(result.data);
+ 					 }
+    	         }
+    	     });
+    	}
+         
+       /**显示订单中的商品 */
+       var totalMoney = 0;
+       function setOrderGoods(result){
+    	   if(!result){
+    		   return;
+    	   }
+		   if(result[0].orderState != 1){//1-待付款2-待发货3-已发货4-已完成5-取消订单6-删除订单
+    		   $("#operateColumn").hide();
+    	   }
+  	   		$("#name").html(result[0].name);
+    		$("#phone").html(result[0].phone);
+    		$("#address_other").html(result[0].address);
+    	   stores = result.length;
+    	   var storeShow = $(".storeShow");
+    	   storeShow.empty();
+    	   for(var i = 0 ; i< stores; i++){
+
+    		   storeShow.append("<div class='order_state_wrap' id= 'shopGoodsDetail_"+i+"' style='border-bottom: 5px solid #dedede;'></div>")
+    		   var storeName = result[i].storeName;
+    		   var itemList = result[i].orderDetailList;
+	    	   var shopGoodsDetail = $("#shopGoodsDetail_"+i);
+
+	    	   var orderState = result[i].orderState
+	    	   var stateHtml='';
+			   if(orderState == 1){//1-待付款2-待发货3-已发货4-已完成5-取消订单6-删除订单
+					stateHtml='<span class="wait_sent">待兑换</span>';
+			   }else if(orderState == 3){
+					stateHtml='<span class="sent">待收货</span>';
+			   }else if(orderState == 2){
+					stateHtml='<span class="wait_sent">待发货</span>';
+			   }else if(orderState == 4){
+					stateHtml= '<span class="complate">已完成</span>';
+				}else{
+					stateHtml= '<span class="complate">已取消</span>';
+				}
+	    	   shopGoodsDetail.empty();
+	    	   shopGoodsDetail.append('<div class="order_state" style="border-top:0;"> <lable id ="shopName" >'+storeName+'</lable>' + stateHtml + '</div>')
+	    	   for(var j = 0 ;j < itemList.length; j ++){
+	    		   var panel =  '<div class="shop_goods_item clear" style = "background-color:#f4f4f4"> '+
+		               ' <div class="detail clear"> '+
+		                   ' <div class="goods_pic">'+
+		                    '    <img src="'+itemList[j].imgUrl+'" style = "width: 100%;height: 100;" alt="" />'+
+		                    '</div>'+
+		                    ' <span  style = "display:none" class = "itemId'+i+j+'">'+itemList[j].itemId+'</span> '+
+		                    '<div class="goods_con" onclick="goToGoodsDetail(this)">'+
+		                     '   <p class="tit order_title" id = "idTitle">'+itemList[j].skuName+'</p>'+
+		                      '  <div class="price clear">'+
+		                       '     <p class="rmb">积分<span class="rmb_num" id = "needPoints">'+itemList[j].skuEarnings+'</span></p>'+
+		                        '</div>'+
+		                    '</div>'+
+		                '</div>'+
+		                '<div class="chos_num clear" value = "'+itemList[j].subtotalEarnings+'">'+
+		                ' <span  style = "display:none">'+itemList[j].subtotalEarnings+'</span> '+
+		                '<div class="buy_num">x'+itemList[j].buyAmt+'</div>'+ 
+		                '</div>'+
+		            '</div>';
+		            totalMoney = totalMoney+parseInt(itemList[j].skuEarnings)*parseInt(itemList[j].buyAmt);
+	    		   shopGoodsDetail.append(panel);
+	    	   }
+	    	   shopGoodsDetail.append(' <div class = "main_panel" > '+
+		        	'<div class = "main_panel_info" > '+
+		        	'	<div class = "panel_title" >兑换优惠：<input  type = "button" style = "color:red"  id = "preferential" value = "包邮 "></div> '+
+		        	'</div> '+
+		        	'<div class = "main_panel_info"> '+
+		        	'	<div class = "panel_title" >配送方式：<input  type = "button" style = "color:red"  id = "send" value = "快递 "></div> '+
+		        	'</div> '+
+		        	'<div class = "main_panel_info"> '+
+		        	'	<div class = "panel_title" >留言：<input  type = "button"  style = "width:80%;" id = "remark'+i+'" ></div> '+
+		        	'</div> '+
+					'<div class="main_panel_info">'+
+						'<div class="panel_title">小计（积分）：'+'<span class="totalPoint" id="totalPoint'+i+'">'+result[i].orderTotalEarnings+'</span></div>'+
+					'</div> '+
+					'<div class="main_panel_info">'+
+						'<span class="order_num" id="orderNum'+i+'">'+"订单号："+result[i].orderCode+'</span></br>'+
+						'<span id="createTime'+i+'">'+"创建时间："+result[i].createTime+'</span>'+
+					'</div> '+
+		        '</div>');
+    	   }
+    	   $("#totalMoney").html(totalMoney);
+    	   if(sessionStorage.getItem("data")){
+   	    	var itemList = JSON.parse(sessionStorage.getItem("data"));
+   	    	if(!itemList){
+   	    		return;
+   	    	}
+   	    	var items = itemList.items;
+   	    	if(items){
+   	    		for(var i = 0 ;i < items.length;i++){
+   	    			$('#remark'+i).val(items[i].orderMemberMemo);
+   	    			for(var j = 0 ; ; j++){
+   	    			   var itemNum = $(".exch_num"+i+j).html()
+   	     			   if(!itemNum){
+   	     				   break;
+   	     			   }
+   	     			   $(".exch_num"+i+j).html(items[i].itemNum);
+   	    			}
+   	    		}
+   	    	}
+       	}
+    	   sessionStorage.setItem("data","");
+       }
+       /***跳转***/
+       function goToGoodsDetail(target){
+    	   var itemId = $(target).attr("data-itemid");
+    	   return location.href="goods_detail.html?id="+itemId;
+       }
+       
+       
+       /*兑换商品 **/
+       function exchangeGoods(){
+    	   var totalMoney = $("#totalMoney").html();
+    	   sessionStorage.setItem("totalMoney",totalMoney+"");
+    	   var orderList = {};
+    	   orderList.orderIds = getGoodsId();
+    	   sessionStorage.setItem("orderList",JSON.stringify(orderList));
+    	   return location.href="payment.html";
+       }
+       
+       /**返回首页 **/
+   		function goToMall(){
+    	   return location.href="main.html";
+       }
+       
+
+
+    </script>
+</body>
+</html>

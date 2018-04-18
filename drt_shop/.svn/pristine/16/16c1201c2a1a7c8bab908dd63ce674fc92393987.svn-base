@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>我的订单</title>
+    <link rel="stylesheet" type="text/css" href="../css/weui.css" />
+    <link rel="stylesheet" type="text/css" href="../css/public.css" />
+    <link rel="stylesheet" type="text/css" href="../css/mall.css" />
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css" />
+    <style>
+    	.modal-footer{
+		border:0px solid;
+		text-align:center;
+	}
+	#myModal{
+		margin-top:50%;
+	}
+	.container {
+	    padding-right: 0;
+	    padding-left: 0;
+	    margin-right: auto; 
+	    margin-left: auto;
+	}
+	html{
+		font-size:inherit;
+	}
+	.modal-dialog{
+		width: 70%;
+    	margin-left: 15%;
+	}
+	.modal-header{
+		padding:0px;
+		border-bottom:0px solid;
+	}
+	.modal-body{
+		padding:10px;
+	}
+	.btn-info{
+		border:0px solid;
+		background-color:red;
+	}
+	.modal-footer{
+		padding:0px;
+		color:blue;
+	}
+	input, button, select, textarea {
+   		line-height: initial;
+	}
+    </style>
+</head>
+<body style="background:#f6f6f6;">
+    <div class="container">
+        <div class="head">
+            <div class="head_navbar"  style = "background-color: #184f84;color:white">
+                <div class="head_navbar_left">
+                    <a class="w-h-35" href="javascript:;" onClick="javascript :history.back(-1);"><i class="back_before"></i></a>
+                </div>
+                <div class="head_navbar_item">我的订单</div>
+                <div class="head_navbar_right">
+                	<a></a>
+                </div>
+            </div>
+        </div>
+         <div class="look_title" style="display:none" id="logindiv"> 
+            <i></i>
+            <span id="info"></span>
+        </div>
+        <div id="shopOrder">
+		        <div class="weui-navbar">
+		            <div class="weui-navbar__item weui-navbar__item_on" onclick="stateClick(0)">
+		                全部订单
+		            </div>
+		            <div class="weui-navbar__item" onclick="stateClick(1)">
+		                待付款
+		            </div>
+		             <div class="weui-navbar__item" onclick="stateClick(2)">
+		                待发货
+		            </div>
+		            <div class="weui-navbar__item" onclick="stateClick(3)">
+		                待收货
+		            </div>
+		            <div class="weui-navbar__item" onclick="stateClick(4)">
+		                已完成
+		            </div>
+		        </div><div style="height:50px;"></div>
+		        <div id="shoporder">
+		        
+		        </div>
+		        
+		        <div style="height:80px;"></div>
+		   </div>
+    </div>
+        	<!-- 模态框 -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h3 class="modal-title text-center" id="myModalLabel1" style = " padding-top: 10px;">操作提示</h3>
+					</div>
+					<div class="modal-body">
+						<form id="userAddForm" method="post">
+								<div class="tab-pane fade in active"  style = "text-align:center">
+										<p>确定取消吗？</p>
+								</div>
+						</form>	
+				</div>
+				<div class="modal-footer" style = "border-top:1px solid #dedede;">
+					<div   onclick="submit1()" data-dismiss="modal" style = "width:50%;float:left;text-align:center;padding: 15px; border-right: 1px solid #dedede;">  
+                       	<b>是</b>  
+                   	</div>
+                   	<div   style = "width:50%;float:right;text-align:center;padding: 15px;" data-dismiss="modal">  
+                       	<b>否</b>  
+                   	</div>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal -->
+</div>
+    
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/layer/layer.js"></script>
+    <script type="text/javascript" src="../common/common.js"></script>
+    <script type="text/javascript" src="../js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        $(function(){
+        	var str = location.search;
+        	if(str.search("me")==-1){
+        		$(".head_navbar_left").empty();
+        		$(".head_navbar_left").append('<a class="w-h-35" href="mall_index.html"><i class="back_before"></i></a>');
+        	}
+            $('.weui-navbar__item').on('click', function () {
+                $(this).addClass('weui-navbar__item_on').siblings().removeClass('weui-navbar__item_on');
+            });
+            queryShopOrder(0);
+        });
+        
+        //获取用户所有订单
+        function queryShopOrder(state){
+        	var data={};
+        	data.state=state;
+        	var ctx=getRootPath();
+        	$.ajax({
+				url : ctx+'/ins/drtShopOrder/selShopOrder',
+				// data: {userId:selectContent[0].userId},
+				data : data,
+				type : "POST",
+				//traditional : true,
+				success : function(result) {
+					if(result=="-1"){
+    	     			$("#shopOrder").hide();
+    	     			$("#logindiv").show();
+    	     			$("#info").html("请登录！");
+    	     			return;
+    	     		}
+					if(result!=null){
+						if(result.shopOrders!=null){
+							$("#shoporder").html("");
+							if(result.shopOrders.length==0){
+								/* $("#shoporder").append('<div>'+
+						            '<i style="padding: 23%;">暂无订单，快去商城看看吧！</i>'+
+						            '<span></span>'+
+						       		 '</div>'); */
+						       		$("#shoporder").html('<div id="noclass" style="width: 100%;  text-align: center; position: relative;background-color:#f6f6f6;padding-top:20px;">'+    	
+											'<img src="../css/img/order_empty.png" style="width:27%;margin: 90px auto 0;">'+
+											'<div style="padding: 15px; color: #999;font-size: 17px;">您还没有相关的订单<br>去挑几件好货吧！</div></div>')
+								return;
+							}
+							for(var i=0;i<result.shopOrders.length;i++){
+								var stateHtml='';
+								if(result.shopOrders[i].orderState==1){
+									stateHtml='<p class="wait_sent">待付款</p>';
+								}else if(result.shopOrders[i].orderState==3){
+									stateHtml='<p class="sent">已发货</p>';
+								}else if(result.shopOrders[i].orderState==2){
+									stateHtml='<p class="wait_sent">待发货</p>';
+								}else if(result.shopOrders[i].orderState==4){
+									stateHtml= '<p class="complate">已完成</p>';
+								}else{
+									stateHtml= '<p class="complate">已取消</p>';
+
+								}
+								var orderHtml='<div class="order_state_wrap">'+
+						            '<div class="order_state" id="'+i+'">'+
+						            	//测试数据，待店铺名称来源确定后修改
+						               ' <p class="order_num">订单号：'+result.shopOrders[i].orderNo+'</p>'+stateHtml+
+						              // ' <p class="order_num">南网官方旗舰店 </p>'+stateHtml+
+						            '</div>'
+					            var orderNo = result.shopOrders[i].orderNo;
+								var orderSons=result.details;
+						        var  sumEarnings = 0;
+						        var  orderCount = 0
+								for(var j=0;j<orderSons.length;j++){
+									var  html='';
+									if(result.shopOrders[i].id==orderSons[j].orderId){
+										orderCount=orderCount+orderSons[j].itemNum;
+										sumEarnings=sumEarnings+orderSons[j].drtShopItem.itemEarnings*orderSons[j].itemNum;
+										html='<div class="shop_goods_item clear">'+
+						                '<div class="detail clear">'+
+						                '<a href="orderGoods/orderDetail.html?id='+orderSons[j].orderId+'&orderState="class="detail_mask"></a>'+						                   ' <div class="goods_pic">'+
+						                        '<img src="'+fileServer+orderSons[j].drtShopItem.itemPicture+'" style = "width: 91px;height: 93px;" alt="" />'+
+						                   ' </div>'+
+						                   ' <div class="goods_con">'+
+						                       ' <p class="tit order_title">'+orderSons[j].drtShopItem.itemName+'</p>'+
+						                       ' <div class="price clear">'+
+						                           ' <p class="rmb"><span class="num">积分</span>'+orderSons[j].drtShopItem.itemEarnings+'</p>'+
+						                        '</div>'+
+						                   ' </div>'+
+						                '</div>'+
+						               ' <div class="buy_num">x'+orderSons[j].itemNum+'</div>'+
+						            '</div>'
+						               orderHtml=orderHtml+html;
+									}
+						             
+								}
+								orderHtml = orderHtml+'<div style="text-align:right;padding:5px;margin-right:5px;font-size:.75rem;">共'+orderCount+'件商品&nbsp;&nbsp;合计(积分)：'+'<font size="3"; color = "red">'+sumEarnings+'</font></div>';
+								 if(result.shopOrders[i].orderState==1){
+									 orderHtml +='<div class="order_state">';
+									orderHtml += '<input type="button" value="付款"  class="pay" onclick="fk(&quot;'+result.shopOrders[i].id+','+sumEarnings+','+orderNo+'&quot;,1)">'+
+					                '<input type="button" value="取消订单"  class="confirm" onclick="cancelOrder(&quot;'+result.shopOrders[i].id+'&quot;,5)">';
+									orderHtml += '</div>';
+								 }else if(result.shopOrders[i].orderState==3){
+									orderHtml +='<div class="order_state">';
+									orderHtml +='<p class="sent">已发货</p>'+
+					                '<input type="button" value="确认收货"  class="confirm"  onclick="qrsh(&quot;'+result.shopOrders[i].id+'&quot;,4)">'
+					                orderHtml += '</div>';
+								 } 
+								 $("#shoporder").append(orderHtml);
+				        	}
+						}
+					}
+				}
+			});
+        }
+        
+        
+        //根据状态获取订单
+        function stateClick(state){
+        	$("#shoporder").html("");
+        	queryShopOrder(state);
+        }
+       
+        /*取消订单 确认提示 */
+        function　cancelOrder(id,orderState){
+        	$("#myModal").modal();
+        	$("#myModal").data("id",id);
+        	$("#myModal").data("orderState",orderState);
+        }
+        function submit1(){
+        	var id = $("#myModal").data("id");
+        	var orderState = $("#myModal").data("orderState");
+        	qrsh(id,orderState);
+        }
+        
+        //确认收货/取消订单
+        function qrsh(id,orderState){
+         	 var data={};
+        	data.id=id;
+        	data.orderState=orderState;
+        	var ctx=getRootPath();
+        	$.ajax({
+				url : ctx+'/ins/drtShopOrder/updShopOrder',
+				// data: {userId:selectContent[0].userId},
+				data : data,
+				type : "POST",
+				//traditional : true,
+				success : function(result) {
+					$("#shoporder").html("");
+		            queryShopOrder(0);
+		            Toast(result.message,2000);
+		            if(result.state == 0){
+		            	$("#myModal").data("id","");
+		            	$("#myModal").data("orderState","");
+		            }
+					} 
+				});
+				//alert(id);
+        }
+        
+        //付款
+        function fk(data){
+        	var orderId = data.split(",")[0];
+        	var sumEarnings = data.split(",")[1];
+        	var orderNo = data.split(",")[2];
+        	location.href="orderGoods/payment.html?sumEarnings="+sumEarnings+"&"+orderId+"&"+orderNo;
+        }
+        
+    </script>
+</body>
+</html>

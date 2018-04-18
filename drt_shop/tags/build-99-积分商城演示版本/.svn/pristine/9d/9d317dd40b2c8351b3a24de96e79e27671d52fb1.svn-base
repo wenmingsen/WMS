@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.csg.intshop.mapper.DrtMallCartMapper">
+	<resultMap id="BaseResultMap" type="com.csg.intshop.entity.DrtMallCart">
+		<id column="id" property="id"></id>
+		<result column="account_id" property="accountId" />
+		<result column="item_id" property="itemId" />
+		<result column="item_num" property="itemNum" />
+		<result column="creator_id" property="creatorId" />
+		<result column="creator_name" property="creatorName" />
+		<result column="create_time" property="createTime" />
+		<result column="last_modifier_id" property="lastModifierId" />
+		<result column="last_modifier_name" property="lastModifierName" />
+		<result column="last_modifier_time" property="lastModifierTime" />
+		<result column="is_delete" property="isDelete" />
+	</resultMap>
+	
+	<sql id="BaseColumnList">
+		id as id,
+		account_id as accountId,
+		item_id as itemId,
+		item_num as itemNum,
+		creator_id as creatorId,
+		creator_name as creatorName,
+		create_time as createTime,
+		last_modifier_id as lastModifierId,
+		last_modifier_name as lastModifierName,
+		last_modifier_time as lastModifierTime,
+		is_delete as isDelete
+	</sql>
+
+	<sql id="BaseCustomQueryCondition">
+		<if test="id != null">
+			and id=#{id}
+		</if>	
+		<if test="accountId != null">
+			and account_id=#{accountId}
+		</if>	
+		<if test="itemId != null">
+			and item_id=#{itemId}
+		</if>	
+		<if test="itemNum != null">
+			and item_num=#{itemNum}
+		</if>	
+		<if test="creatorId != null">
+			and creator_id=#{creatorId}
+		</if>	
+		<if test="creatorName != null">
+			and creator_name=#{creatorName}
+		</if>	
+		<if test="createTime != null">
+			and create_time=#{createTime}
+		</if>	
+		<if test="lastModifierId != null">
+			and last_modifier_id=#{lastModifierId}
+		</if>	
+		<if test="lastModifierName != null">
+			and last_modifier_name=#{lastModifierName}
+		</if>	
+		<if test="lastModifierTime != null">
+			and last_modifier_time=#{lastModifierTime}
+		</if>	
+		and is_delete=1
+	</sql>
+
+	<insert id="insert" parameterType="com.csg.intshop.entity.DrtMallCart" >
+    	insert into drt_mall_cart
+    		(id, account_id, item_id, item_num, creator_id, creator_name, create_time, last_modifier_id, last_modifier_name, last_modifier_time, is_delete) 
+    	values
+    		(#{id}, #{accountId}, #{itemId}, #{itemNum}, #{creatorId}, #{creatorName}, #{createTime}, #{lastModifierId}, #{lastModifierName}, #{lastModifierTime}, #{isDelete})
+  	</insert>
+
+  	<insert id="insertList" parameterType="java.util.List" >
+    	insert into drt_mall_cart
+    		(id, account_id, item_id, item_num, creator_id, creator_name, create_time, last_modifier_id, last_modifier_name, last_modifier_time, is_delete) 
+    	values
+    	<foreach collection="list" index="index" item="item" separator=",">
+    		(#{item.id}, #{item.accountId}, #{item.itemId}, #{item.itemNum}, #{item.creatorId}, #{item.creatorName}, #{item.createTime}, #{item.lastModifierId}, #{item.lastModifierName}, #{item.lastModifierTime}, #{item.isDelete})
+    	</foreach>
+  	</insert>
+
+  	<update id="delete" parameterType="java.lang.String">
+		update drt_mall_cart set is_delete=0 where id = #{id}
+    </update>
+
+  	<update id="update" parameterType="com.csg.intshop.entity.DrtMallCart">
+		update drt_mall_cart set
+		account_id=#{accountId}, item_id=#{itemId}, item_num=#{itemNum}, creator_id=#{creatorId}, creator_name=#{creatorName}, create_time=#{createTime}, last_modifier_id=#{lastModifierId}, last_modifier_name=#{lastModifierName}, last_modifier_time=#{lastModifierTime}, is_delete=#{isDelete}
+		where id = #{id} and is_delete=1
+	</update>
+	
+	<update id="updateIfNotNull" parameterType="com.csg.intshop.entity.DrtMallCart">
+		update drt_mall_cart set
+		<if test="accountId != null">
+			account_id=#{accountId}, 
+		</if>
+		<if test="itemId != null">
+			item_id=#{itemId}, 
+		</if>
+		<if test="itemNum != null">
+			item_num=#{itemNum}, 
+		</if>
+		<if test="creatorId != null">
+			creator_id=#{creatorId}, 
+		</if>
+		<if test="creatorName != null">
+			creator_name=#{creatorName}, 
+		</if>
+		<if test="createTime != null">
+			create_time=#{createTime}, 
+		</if>
+		<if test="lastModifierId != null">
+			last_modifier_id=#{lastModifierId}, 
+		</if>
+		<if test="lastModifierName != null">
+			last_modifier_name=#{lastModifierName}, 
+		</if>
+		<if test="lastModifierTime != null">
+			last_modifier_time=#{lastModifierTime}, 
+		</if>
+		is_delete=1
+		where id = #{id} and is_delete=1
+	</update>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+	    select 
+	    <include refid="BaseColumnList" />
+	    from drt_mall_cart
+	    where 
+			id = #{id}
+  	</select>
+
+  	<select id="selectList" resultMap="BaseResultMap" parameterType="com.csg.intshop.entity.DrtMallCart">
+	    select 
+	    <include refid="BaseColumnList" />
+	    from drt_mall_cart
+	    where 1=1
+	    <include refid="BaseCustomQueryCondition" />
+  	</select>
+
+
+	
+</mapper>
