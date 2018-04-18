@@ -1,4 +1,0 @@
-#Version information
-#Tue, 14 Nov 2017 21:18:07 +0800
-
-version=${env.BUILD_NUMBER}
