@@ -1,0 +1,101 @@
+<#assign className = table.className>
+<#assign classNameLower = className?uncap_first>
+<#assign jing = "#">
+<#assign left = "{">
+<#assign right = "}">
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="${basepackage}.mapper.${className}Mapper">
+	<resultMap id="BaseResultMap" type="${basepackage}.entity.${className}">
+		<#list table.columns as column>
+			<#if !column.isNotIdOrVersionField>
+		<id column="${column.sqlName}" property="${column.columnNameLower}"></id>
+			</#if>
+			<#if column.isNotIdOrVersionField>
+		<result column="${column.sqlName}" property="${column.columnNameLower}" />
+			</#if>
+		</#list>
+	</resultMap>
+	
+	<sql id="BaseColumnList">
+		<#list table.columns as column>
+		${column.sqlName} as ${column.columnNameLower}<#if column_has_next>,</#if>
+		</#list>
+	</sql>
+
+	<sql id="BaseCustomQueryCondition">
+		<#list table.columns as column>
+		<#if "${column.columnNameLower}"=="isDelete">
+		and ${column.sqlName}=1
+		<#else>
+		<if test="${column.columnNameLower} != null">
+			and ${column.sqlName}=${jing}${left}${column.columnNameLower}${right}
+		</if>	
+		</#if>
+		</#list>
+	</sql>
+
+	<insert id="insert" parameterType="${basepackage}.entity.${className}" >
+    	insert into ${table.sqlName}
+    		(<#list table.columns as column>${column.sqlName}<#if column_has_next>, </#if></#list>) 
+    	values
+    		(<#list table.columns as column>${jing}${left}${column.columnNameLower}${right}<#if column_has_next>, </#if></#list>)
+  	</insert>
+
+  	<insert id="insertList" parameterType="java.util.List" >
+    	insert into ${table.sqlName}
+    		(<#list table.columns as column>${column.sqlName}<#if column_has_next>, </#if></#list>) 
+    	values
+    	<foreach collection="list" index="index" item="item" separator=",">
+    		(<#list table.columns as column>${jing}${left}item.${column.columnNameLower}${right}<#if column_has_next>, </#if></#list>)
+    	</foreach>
+  	</insert>
+
+  	<update id="delete" parameterType="java.lang.String">
+		update ${table.sqlName} set is_delete=0 where <#list table.columns as column><#if !column.isNotIdOrVersionField>${column.sqlName} = ${jing}${left}${column.columnNameLower}${right}</#if></#list>
+    </update>
+
+  	<update id="update" parameterType="${basepackage}.entity.${className}">
+		update ${table.sqlName} set
+		<#list table.columns as column><#if column.isNotIdOrVersionField>${column.sqlName}=${jing}${left}${column.columnNameLower}${right}<#if column_has_next>, </#if></#if></#list>
+		where <#list table.columns as column><#if !column.isNotIdOrVersionField>${column.sqlName} = ${jing}${left}${column.columnNameLower}${right}</#if></#list> and is_delete=1
+	</update>
+	
+	<update id="updateIfNotNull" parameterType="${basepackage}.entity.${className}">
+		update ${table.sqlName} set
+		<#list table.columns as column>
+		<#if column.isNotIdOrVersionField>
+		<#if "${column.columnNameLower}"=="isDelete">
+		${column.sqlName}=1<#if column_has_next>, </#if>
+		<#else>
+		<if test="${column.columnNameLower} != null">
+			${column.sqlName}=${jing}${left}${column.columnNameLower}${right}<#if column_has_next>, </#if>
+		</if>
+		</#if>
+		</#if></#list>
+		where <#list table.columns as column><#if !column.isNotIdOrVersionField>${column.sqlName} = ${jing}${left}${column.columnNameLower}${right}</#if></#list> and is_delete=1
+	</update>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+	    select 
+	    <include refid="BaseColumnList" />
+	    from ${table.sqlName}
+	    where 
+	    <#list table.columns as column>
+		<#if !column.isNotIdOrVersionField>
+			${column.sqlName} = ${jing}${left}${column.columnNameLower}${right}
+		</#if>
+		</#list>
+  	</select>
+
+  	<select id="selectList" resultMap="BaseResultMap" parameterType="${basepackage}.entity.${className}">
+	    select 
+	    <include refid="BaseColumnList" />
+	    from ${table.sqlName}
+	    where 1=1
+	    <include refid="BaseCustomQueryCondition" />
+  	</select>
+
+
+	
+</mapper>
